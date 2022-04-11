@@ -1,0 +1,15 @@
+// Basic configs to run ESLint
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser", // allows ESLint to understand TS syntax
+    "plugins": [
+      "@typescript-eslint" // use rules within codebase
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules":{
+      "semi": ["error", "always"]
+    }
+}
