@@ -10,7 +10,7 @@
       "plugin:@typescript-eslint/recommended"
     ],
     "rules":{
-        "quotes": ["error", "double"],
+        "quotes": ["error", "single"],
         "semi": ["error", "always"],
         "@typescript-eslint/no-explicit-any": ["error"]
     }
