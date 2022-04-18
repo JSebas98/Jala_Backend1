@@ -181,22 +181,81 @@
 // myArray.push(true)
 
 // Tuples
-let a: [number] = [2];
-// a = [2, 3, 4]; // Error
-// a = []; // Error
-let b: [string, string, number] = ['test', 'test', 1998];
-b = ['Hola', 'Mundo', 1998]
+// let a: [number] = [2];
+// // a = [2, 3, 4]; // Error
+// // a = []; // Error
+// let b: [string, string, number] = ['test', 'test', 1998];
+// b = ['Hola', 'Mundo', 1998]
 
-let trainFares: [number, number?][] = [
-    [3.75],
-    [8.5, 7.7],
-//    [1.2, 3.6, 3.2] // Error extra number
-];
+// let trainFares: [number, number?][] = [
+//     [3.75],
+//     [8.5, 7.7],
+// //    [1.2, 3.6, 3.2] // Error extra number
+// ];
 
-// Tuples with min elems, but infinite max elems
-let names: [string, ...string[]] = ["Sebas"];
-names = ['Sara', 'Pepe', 'Carlos'];
-// names = []; // Error empty
+// // Tuples with min elems, but infinite max elems
+// let names: [string, ...string[]] = ["Sebas"];
+// names = ['Sara', 'Pepe', 'Carlos'];
+// // names = []; // Error empty
 
-let list: [number, boolean, ...string[]] = [5, true];
-list = [3, false, 'Carla', 'Operadora']
+// let list: [number, boolean, ...string[]] = [5, true];
+// list = [3, false, 'Carla', 'Operadora']
+
+// Read Only Array
+// let as: readonly number[] = [1, 2, 3]; // Const blocks assignations, not mutation
+// // as.push(8); // Error
+// as = [5];
+
+// let bs: readonly number[] = as.concat(4); // Concat copies as and adds a 4
+
+// let copied = as.slice();
+// copied[0] = 100;
+
+// function c(): void {
+//     let r = 2 + 1;
+// }
+
+// function d(): never{
+//     throw TypeError('Always Error');
+// }
+
+// d();
+
+// function e(): never {
+//     while (true){
+
+//     }
+// }
+
+// e();
+
+// Enums
+enum Language {
+    English = 0,
+    Spanish = 1
+}
+
+enum Language { // Enums can be "divided"
+    Russian = 2
+}
+
+let testEnum = Language.Spanish;
+let secondTestEnum = Language['English'];
+let thirdTestEnum = Language.Russian;
+
+enum Language2 {
+    English = 100,
+    Spanish = 200 + 300,
+    Russian
+}
+
+let russian = Language2.Russian;
+
+enum Color {
+    Red = '0x2154',
+    blue = '#0x6454',
+    Pink = 0xc1005,
+    White = 255
+}
+
+let red = Color['Red'];
