@@ -3,7 +3,7 @@
 // original function.
 
 function list(...numbers: number[]): number[] {
-    return Array.prototype.slice.call(numbers);
+    return Array.from(numbers);
 }
 
 let list1 = list(1, 2, 3);
