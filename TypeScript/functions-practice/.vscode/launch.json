@@ -13,7 +13,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\bind.ts",
+            "program": "${workspaceFolder}\\index.ts",
         }
     ]
 }
