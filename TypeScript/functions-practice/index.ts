@@ -83,40 +83,95 @@
 // fancyDate(); // Error
 
 // Generator functions
-function* createNumbers(): IterableIterator<number> {
-    let n: number = 0;
-    while (true) {
-        yield n++;
+// function* createNumbers(): IterableIterator<number> {
+//     let n: number = 0;
+//     while (true) {
+//         yield n++;
+//     }
+// }
+
+// let numbers = createNumbers();
+// console.log(numbers.next());
+// console.log(numbers.next());
+// console.log(numbers.next());
+
+
+// function* generateFibonacci(): IterableIterator<number> {
+//     let n1: number = 0;
+//     let n2: number = 1;
+//     while (true) {
+//         yield n1;
+//         [n1, n2] = [n2, n1 + n2];
+//     }
+// }
+
+// let fibonacciSequence = generateFibonacci();
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+// console.log(fibonacciSequence.next());
+
+// Iterator
+
+// let numbers = {
+//     *[Symbol.iterator]() {
+//         for(let n = 1; n<=10; n++) {
+//             yield n;
+//         }
+//     }
+// }
+
+// console.log(numbers);
+
+// for(let a of numbers){
+//     console.log(a);
+// }
+
+// // Spread iterator
+// let allNumbers = [...numbers];
+
+// // Destructure iterator
+// let [one, two, ...rest] = numbers;
+
+// Function type
+// function sum(a: number, b:number): number {
+//     return a + b;
+// }
+
+// // Call signature (firma de funcion)
+// type myFunc = (a:number, b:number) => number;
+
+// type Log = (message: string, userId?: string) => void;
+
+// type Log2 = {
+//     (message: string, userId?: string): void;
+// }
+
+// Overloaded functions: function with multiple call signatures
+
+class Reservation {
+    constructor(private from: Date, private to: Date | string, private destination?: string) {
+
     }
 }
 
-let numbers = createNumbers();
-// console.log(numbers.next());
-// console.log(numbers.next());
-// console.log(numbers.next());
-
-
-function* generateFibonacci(): IterableIterator<number> {
-    let n1: number = 0;
-    let n2: number = 1;
-    while (true) {
-        yield n1;
-        [n1, n2] = [n2, n1 + n2];
-    }
+type Reserve = {
+    (from: Date, to: Date, destination: string): Reservation
+    (from: Date, destination: string): Reservation
 }
 
-let fibonacciSequence = generateFibonacci();
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
-console.log(fibonacciSequence.next());
+let reserve: Reserve = (from: Date, to: Date | string, destination?: string): Reservation => {
+    return new Reservation(from, to, destination);
+}
 
-
+let myReservation = reserve(new Date(), new Date(), 'Bogotá');
+let myReservation2 = reserve(new Date(), 'Cali');
+let myReservation3 = reserve(new Date(), 'Cali');
