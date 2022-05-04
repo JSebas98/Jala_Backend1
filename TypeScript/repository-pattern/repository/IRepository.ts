@@ -1,4 +1,4 @@
-interface IRepository<T> {
+export interface IRepository<T> {
     
     getById(id: number): T;
 

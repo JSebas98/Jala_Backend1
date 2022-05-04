@@ -1,8 +1,17 @@
-import { EntityBase } from './EntityBase';
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
-export class User extends EntityBase {
+@Entity()
+export class User {
 
-    constructor(public id: number, public name: string, ) {
-        super(id);
-    }
+    @PrimaryColumn()
+    id!: number;
+
+    @Column()
+    name!: string;
+
+    @Column()
+    email!: string;
+
+    @Column()
+    password!: string;
 }
