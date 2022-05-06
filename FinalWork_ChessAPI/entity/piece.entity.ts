@@ -1,7 +1,13 @@
-import { Color, File, PieceStatus, Rank } from "../src/types";
-import { Column } from 'typeorm';
+import { Color, File, PieceName, PieceStatus, Rank } from "../src/types";
+import { Column, Entity, PrimaryColumn, TableInheritance } from 'typeorm';
 
-export abstract class Piece {
+@Entity()
+@TableInheritance({ column: { type: "varchar", name: "pieces"} })
+export class Piece {
+    
+    @PrimaryColumn()
+    name!: PieceName;
+    
     @Column()
     color!: Color;
 

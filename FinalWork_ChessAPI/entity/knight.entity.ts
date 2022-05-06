@@ -1,7 +1,7 @@
-import { Entity } from "typeorm";
+import { ChildEntity } from "typeorm";
 import { Piece } from './piece.entity';
 
-@Entity()
+@ChildEntity()
 export class Knight extends Piece {
 
 }

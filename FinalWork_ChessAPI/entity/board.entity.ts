@@ -1,13 +1,9 @@
 import { Column } from "typeorm";
-import { Piece } from "./piece.entity";
-import { Position } from "./position.entity";
+import { Square } from './square.entity';
 
 export class Board {
     
     @Column()
-    squares!: Position[];
+    squares!: Square[];
 
-    @Column()
-    pieces!: Piece[];
-    
 }
