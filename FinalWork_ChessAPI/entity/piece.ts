@@ -8,9 +8,9 @@ export abstract class Piece {
                 private file: File,
                 private rank: Rank) {}
 
-    moveTo(square: Square) {
-        this.rank = square.getRank();
-        this.file = square.getFile();
+    moveTo(file: File, rank: Rank) {
+        this.file = file;
+        this.rank = rank;
     }
 
     getColor(): Color {

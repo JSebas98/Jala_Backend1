@@ -5,6 +5,6 @@ import { File, Rank } from '../shared/types';
 export interface IBoardService {
     
     initBoard(): Board;
-    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Board;
+    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Board | string;
 
 }

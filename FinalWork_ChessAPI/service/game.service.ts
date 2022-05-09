@@ -31,9 +31,13 @@ export class GameService implements IGameService {
         return this.currentGame;
     }
 
-    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game {
-        let updatedBoard: Board = this.boardService.movePiece(initialFile, initialRank, goalFile, goalRank); 
-        this.currentGame.setBoard(updatedBoard);
-        return this.currentGame;
+    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game | string {
+        let response: Board | string = this.boardService.movePiece(initialFile, initialRank, goalFile, goalRank); 
+        if (typeof response === 'string') {
+            return response;
+        } else {
+            this.currentGame.setBoard(response);
+            return this.currentGame;
+        }
     }
 }

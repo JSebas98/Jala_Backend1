@@ -7,6 +7,6 @@ export interface IGameService {
     createNewGame(): Game;
     restartGame(): Game;
     getCurrentGame(): Game;
-    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game;
+    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game | string;
 
 }

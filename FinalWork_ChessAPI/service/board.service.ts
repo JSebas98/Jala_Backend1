@@ -83,7 +83,7 @@ export class BoardService implements IBoardService {
         return initializedBoard;
     }
 
-    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Board {
+    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Board | string {
         // Find squares
         const squares: Square[] = this.currentBoard.getSquares();
 
@@ -94,14 +94,14 @@ export class BoardService implements IBoardService {
         if(!currentSquare.isEmpty() && goalSquare.isEmpty()) {
             let piece: Piece | undefined = currentSquare.removePiece();
             if (piece) {
-                piece.setFile(goalFile);
-                piece.setRank(goalRank);
+                piece.moveTo(goalFile, goalRank);
                 goalSquare.setPiece(piece);
             };
-        }
 
-        this.currentBoard.setSquares(squares);
-        
-        return this.currentBoard;
+            this.currentBoard.setSquares(squares);
+            return this.currentBoard;
+        } else {
+            return "Move could not be done. Initial square is empty or Goal square is occupied. Try again.";
+        }
     }
 }
