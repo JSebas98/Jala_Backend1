@@ -1,13 +1,42 @@
 import { DbConnection } from "./db-connection";
+import { GridFS } from './data-access/grid-fs';
+import BookDataAccess from "./data-access/book-data-access";
+import { Book } from "./entity/bookModel";
 
 class Test {
     async configureDb(){
         let dbConnection = new DbConnection();
+        await dbConnection.connect();
 
-        //await dbConnection.connect();
+        // Testing
+        let bookDatAccess = new BookDataAccess();
 
-        // optional
-        //await dbConnection.disconnect();
+        let book = new Book();
+        book.author = 'test';
+        book.date = new Date();
+        book.title = 'design patterns';
+
+        let createdBook = await bookDatAccess.save(book);
+
+        console.log(createdBook);
+
+        let readedBook = await bookDatAccess.read(createdBook.id);
+
+
+        readedBook.title = 'UPDATED';
+
+        await bookDatAccess.update(readedBook._id, readedBook);
+        
+        await bookDatAccess.remove(readedBook._id);
+
+
+        //const gridFS = new GridFS();
+        //await gridFS.upload('helloWorld.txt');
+
+        //await gridFS.download('helloWorld.txt');
+
+        //optional
+        await dbConnection.disconnect();
         
     }
 }

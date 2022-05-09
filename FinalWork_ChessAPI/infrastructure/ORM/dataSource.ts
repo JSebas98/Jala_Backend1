@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 
-export const AppDataSource = new DataSource({
+export const SQLiteDataSource = new DataSource({
     type: "sqlite",
     database: "chess.sqlite",
     synchronize: true,
@@ -10,3 +10,6 @@ export const AppDataSource = new DataSource({
     migrations: [],
     subscribers: []
 });
+
+// Initialize database
+SQLiteDataSource.initialize();

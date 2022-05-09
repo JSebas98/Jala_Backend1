@@ -4,5 +4,12 @@ export class DbConnection {
 
     private DB_CONNECTION_STRING = 'mongodb://localhost:27017/myapp';
     
-    //mongoose.connect(this.DB_CONNECTION_STRING);
+    async connect() {
+        await mongoose.connect(this.DB_CONNECTION_STRING, {});
+    }
+
+    async disconnect() {
+        await mongoose.disconnect();
+    }
+    
 }

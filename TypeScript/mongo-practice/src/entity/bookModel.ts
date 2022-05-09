@@ -1,6 +1,6 @@
 
 export class Book {
-    author: string;
-    title: string;
-    date: Date;
+    author!: string;
+    title!: string;
+    date!: Date;
 }
