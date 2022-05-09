@@ -1,25 +1,26 @@
-import { BookSchema } from '../entity/book';
+import { Types } from 'mongoose';
+import { BookModel } from '../entity/book';
 import { Book } from '../entity/bookModel';
 
 export default class BookDataAccess {
 
     async save(bookToSave: Book) {
-        const bookSchema = new BookSchema(bookToSave);
-        return await bookSchema.save();
+        const bookDoc = new BookModel(bookToSave);
+        return await bookDoc.save();
     }
 
     async read(id: string) {
-        return await BookSchema.findById(id).lean();
+        return await BookModel.findById(id).lean();
     }
 
-    async update(id: string, bookToSave: Book) {
-        return await BookSchema
+    async update(id: string | Types.ObjectId, bookToSave: Book) {
+        return await BookModel
             .findByIdAndUpdate(id, bookToSave)
             .lean();
     }
 
-    async remove(id: string) {
-        return await BookSchema
+    async remove(id: string | Types.ObjectId) {
+        return await BookModel
             .findByIdAndRemove(id)
             .lean();
     }

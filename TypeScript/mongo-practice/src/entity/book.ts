@@ -4,7 +4,7 @@ import { IBook } from "./IBook";
 const bookSchema = new Schema<IBook>({
     author: { type: String, required: true },
     title: { type: String, default: 'No title' },
-    date: { type: Date, default: Date.now},
+    date: { type: Date, default: Date.now },
 });
 
-export const BookSchema = model<IBook>('Book', bookSchema);
+export const BookModel = model<IBook>('Book', bookSchema);

@@ -12,22 +12,24 @@ class Test {
         let bookDatAccess = new BookDataAccess();
 
         let book = new Book();
-        book.author = 'test';
+        book.author = 'test1';
         book.date = new Date();
         book.title = 'design patterns';
 
         let createdBook = await bookDatAccess.save(book);
 
-        console.log(createdBook);
-
         let readedBook = await bookDatAccess.read(createdBook.id);
 
+        if (readedBook) {
 
-        readedBook.title = 'UPDATED';
+            readedBook.title = 'UPDATED';
 
-        await bookDatAccess.update(readedBook._id, readedBook);
-        
-        await bookDatAccess.remove(readedBook._id);
+            await bookDatAccess.update(readedBook._id, readedBook);
+
+            console.log(readedBook);
+            
+            await bookDatAccess.remove(readedBook._id);
+        }
 
 
         //const gridFS = new GridFS();
