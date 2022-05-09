@@ -5,7 +5,6 @@ import { Color } from '../shared/types';
 export class Game {
 
     private move: number = 0;
-    private turn: Color = 'White';
 
     constructor(private id: number,
                 private players: Player[],
@@ -33,13 +32,5 @@ export class Game {
 
     setMove(move: number): void {
         this.move = move;
-    }
-
-    getTurn(): Color {
-        return this.turn;
-    }
-
-    setTurn(turn: Color): void {
-        this.turn = turn;
     }
 }

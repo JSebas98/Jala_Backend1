@@ -1,5 +1,6 @@
 import express from 'express';
 import "reflect-metadata";
+import { Game } from '../entity/game';
 
 import { BoardService } from '../service/board.service';
 import { GameService } from '../service/game.service';
@@ -22,7 +23,12 @@ app.post('/game', (request, response) => {
 
 // Get current game
 app.get('/game', (request, response) => {
-    response.status(200).json(gameServ.getCurrentGame());
+    if (gameServ.getCurrentGame()) {
+        response.status(200).json(gameServ.getCurrentGame());
+    } else {
+        response.status(204).json('No game has been created. Create a new game.');
+    }
+
 });
 
 // Restart game
@@ -32,12 +38,26 @@ app.post('/game/restart', (request, response) => {
 
 // Make a move
 app.post('/game/move', (request, response) => {
-    let initialFile: File = request.body.currentSquare.file;
-    let initialRank: Rank = request.body.currentSquare.rank;
-    let goalFile: File = request.body.goalSquare.file;
-    let goalRank: Rank = request.body.goalSquare.rank;
-    
-    response.send(gameServ.movePiece(initialFile, initialRank, goalFile, goalRank));
+    // Make sure only one move is made.
+    if (Array.isArray(request.body.currentSquare) ||
+        Array.isArray(request.body.goalSquare)) {
+        response.status(400).json('You can only make one move per turn. Try again with only one Current square and only one Goal square.');
+    } else {
+        let initialFile: File = request.body.currentSquare.file;
+        let initialRank: Rank = request.body.currentSquare.rank;
+        let goalFile: File = request.body.goalSquare.file;
+        let goalRank: Rank = request.body.goalSquare.rank;
+
+        // Store result from calling movePiece
+        let resMovePiece: Game | string = gameServ.movePiece(initialFile, initialRank, goalFile, goalRank);
+        
+        // If result is some kind of error, return right status and message. Else, return Game.
+        if (typeof resMovePiece === 'string') {
+            response.status(400).json(resMovePiece);
+        } else {  
+            response.status(201).json(resMovePiece);
+        }
+    }
 })
 
 app.listen(port, () =>{

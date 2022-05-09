@@ -83,25 +83,35 @@ export class BoardService implements IBoardService {
         return initializedBoard;
     }
 
-    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Board | string {
-        // Find squares
+    getPiece(file: File, rank: Rank): Piece | undefined {
+        const currentSquare: Square = this.getSquare(file, rank);
+        
+        return currentSquare.getPiece();
+    }
+
+    getSquare(file: File, rank: Rank): Square {
+        // Get squares of current board.
         const squares: Square[] = this.currentBoard.getSquares();
 
-        const currentSquare: Square = squares[this.currentBoard.findIndexSquare(initialFile, initialRank)];
-        const goalSquare: Square = squares[this.currentBoard.findIndexSquare(goalFile, goalRank)];
+        return squares[this.currentBoard.findIndexSquare(file, rank)];
+    }
 
-        // Check if squares are available
-        if(!currentSquare.isEmpty() && goalSquare.isEmpty()) {
+    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Board | string {
+        // Get current and goal squares.
+        const currentSquare: Square = this.getSquare(initialFile, initialRank);
+        const goalSquare: Square = this.getSquare(goalFile, goalRank);
+
+        // Check if goal square is available
+        if(goalSquare.isEmpty()) {
             let piece: Piece | undefined = currentSquare.removePiece();
             if (piece) {
                 piece.moveTo(goalFile, goalRank);
                 goalSquare.setPiece(piece);
             };
 
-            this.currentBoard.setSquares(squares);
             return this.currentBoard;
         } else {
-            return "Move could not be done. Initial square is empty or Goal square is occupied. Try again.";
+            return "Move could not be made. Goal square is occupied. Try again with another square.";
         }
     }
 }

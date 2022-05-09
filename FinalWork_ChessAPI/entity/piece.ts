@@ -1,5 +1,4 @@
 import { Color, Rank, File, PieceType } from '../shared/types';
-import { Square } from "./square";
 
 export abstract class Piece {
 

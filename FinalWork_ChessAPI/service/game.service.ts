@@ -4,9 +4,9 @@ import { IGameService } from './IGameService';
 import { DITypes } from '../shared/inversify.types';
 import { Game } from '../entity/game';
 import { Player } from '../entity/player';
-import { Square } from '../entity/square';
 import { File, Rank } from '../shared/types';
 import { Board } from '../entity/board';
+import { Piece } from '../entity/piece';
 
 @injectable()
 export class GameService implements IGameService {
@@ -28,16 +28,35 @@ export class GameService implements IGameService {
 
     restartGame(): Game {
         this.currentGame.setBoard(this.boardService.initBoard());
+        this.currentGame.setMove(0);
+
         return this.currentGame;
     }
 
     movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game | string {
-        let response: Board | string = this.boardService.movePiece(initialFile, initialRank, goalFile, goalRank); 
-        if (typeof response === 'string') {
-            return response;
+        // Get piece in initial square to check color.
+        let piece: Piece | undefined = this.boardService.getPiece(initialFile, initialRank);
+        let currentMove: number = this.currentGame.getMove();
+
+        if (piece) {
+            // If move is even and piece to be moved is white, try to move piece OR
+            // If move is odd and piece to be moved is black, try to move piece
+            if ((currentMove % 2 === 0 && piece.getColor() === 'White') ||
+            (currentMove % 2 !== 0 && piece.getColor() === 'Black')) {
+                let response: Board | string = this.boardService.movePiece(initialFile, initialRank, goalFile, goalRank); 
+                // Move could not be made.
+                if (typeof response === 'string') {
+                    return response;
+                } else { // Move has been done.
+                    this.currentGame.setBoard(response);
+                    this.currentGame.setMove(currentMove + 1);
+                    return this.currentGame;
+                }
+            } else {
+                return "Move cannot be made. It is the other player's turn.";
+            }
         } else {
-            this.currentGame.setBoard(response);
-            return this.currentGame;
+            return "Current square is empty. Try again at another square.";
         }
     }
 }
