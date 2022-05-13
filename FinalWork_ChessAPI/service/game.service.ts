@@ -4,7 +4,7 @@ import { IGameService } from './IGameService';
 import { DITypes } from '../shared/inversify.types';
 import { Game } from '../entity/game';
 import { Player } from '../entity/player';
-import { File, Rank } from '../shared/types';
+import { File, Rank, GameStatus } from '../shared/types';
 import { Board } from '../entity/board';
 import { Piece } from '../entity/piece';
 
@@ -33,6 +33,13 @@ export class GameService implements IGameService {
         return this.currentGame;
     }
 
+    updateGameStatus(): void {
+        let status: GameStatus = this.currentGame.getStatus();
+        if (status === 'Ready to start' && this.currentGame.getMove() > 0) {
+            this.currentGame.setStatus('Playing');
+        }
+    }
+
     movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game | string {
         // Get piece in initial square to check color.
         let piece: Piece | undefined = this.boardService.getPiece(initialFile, initialRank);
@@ -50,6 +57,7 @@ export class GameService implements IGameService {
                 } else { // Move has been done.
                     this.currentGame.setBoard(response);
                     this.currentGame.setMove(currentMove + 1);
+                    this.updateGameStatus();
                     return this.currentGame;
                 }
             } else {
