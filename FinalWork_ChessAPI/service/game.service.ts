@@ -35,8 +35,7 @@ export class GameService implements IGameService {
     }
 
     updateGameStatus(): void {
-        let status: GameStatus = this.currentGame.getStatus();
-        if (status === 'Ready to start' && this.currentGame.getMove() > 0) {
+        if (this.currentGame.getStatus() === 'Ready to start' && this.currentGame.getMove() > 0) {
             this.currentGame.setStatus('Playing');
         }
     }

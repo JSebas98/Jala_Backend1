@@ -39,8 +39,8 @@ export class BoardService implements IBoardService {
         // Adding pieces in their initial position.
         // Adding Rook, Knight, Bishop, Queen, and King.
         const colors: Color[] = ['White', 'Black'];
-        const distOppositePieces = 56; // # of squares between opposite color pieces.
-        const distOppositePawns = 40;
+        const distOppositePieces = 56; // # of squares between opposite color pieces at initial state.
+        const distOppositePawns = 40; // # of squares between opposite color pawns at initial state.
 
         for(let c=0; c<2; c++) {
             let color = colors[c];
