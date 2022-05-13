@@ -1,6 +1,7 @@
 import express from 'express';
 import "reflect-metadata";
 import { Game } from '../entity/game';
+import { Message } from '../entity/message';
 
 import { BoardService } from '../service/board.service';
 import { GameService } from '../service/game.service';
@@ -26,7 +27,7 @@ app.get('/game', (request, response) => {
     if (gameServ.getCurrentGame()) {
         response.status(200).json(gameServ.getCurrentGame());
     } else {
-        response.status(204).json('No game has been created. Create a new game.');
+        response.status(204).json(new Message('No game has been created. Create a new game.'));
     }
 
 });
@@ -41,7 +42,7 @@ app.post('/game/move', (request, response) => {
     // Make sure only one move is made.
     if (Array.isArray(request.body.currentSquare) ||
         Array.isArray(request.body.goalSquare)) {
-        response.status(400).json('You can only make one move per turn. Try again with only one Current square and only one Goal square.');
+        response.status(400).json(new Message('You can only make one move per turn. Try again with only one Current square and only one Goal square.'));
     } else {
         let initialFile: File = request.body.currentSquare.file;
         let initialRank: Rank = request.body.currentSquare.rank;
@@ -49,7 +50,7 @@ app.post('/game/move', (request, response) => {
         let goalRank: Rank = request.body.goalSquare.rank;
 
         // Store result from calling movePiece
-        let resMovePiece: Game | string = gameServ.movePiece(initialFile, initialRank, goalFile, goalRank);
+        let resMovePiece: Game | Message = gameServ.movePiece(initialFile, initialRank, goalFile, goalRank);
         
         // If result is some kind of error, return right status and message. Else, return Game.
         if (typeof resMovePiece === 'string') {

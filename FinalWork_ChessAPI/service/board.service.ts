@@ -10,6 +10,7 @@ import { Pawn } from '../entity/pawn';
 import { IBoardService } from './IBoardService';
 import { injectable } from "inversify";
 import { Piece } from "../entity/piece";
+import { Message } from '../entity/message';
 
 @injectable()
 export class BoardService implements IBoardService {

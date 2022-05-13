@@ -1,12 +1,14 @@
 import { Game } from "../entity/game";
 import { Square } from "../entity/square";
 import { File, Rank } from "../shared/types";
+import { Message } from '../entity/message';
 
 export interface IGameService {
     
-    createNewGame(): Game;
-    restartGame(): Game;
+    createNewGame(): Game;    
     getCurrentGame(): Game;
-    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game | string;
+    restartGame(): Game;
+    updateGameStatus(): void;
+    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game | Message;
 
 }

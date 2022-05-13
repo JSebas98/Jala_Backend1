@@ -7,6 +7,7 @@ import { Player } from '../entity/player';
 import { File, Rank, GameStatus } from '../shared/types';
 import { Board } from '../entity/board';
 import { Piece } from '../entity/piece';
+import { Message } from '../entity/message';
 
 @injectable()
 export class GameService implements IGameService {
@@ -40,7 +41,7 @@ export class GameService implements IGameService {
         }
     }
 
-    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game | string {
+    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game | Message {
         // Get piece in initial square to check color.
         let piece: Piece | undefined = this.boardService.getPiece(initialFile, initialRank);
         let currentMove: number = this.currentGame.getMove();
@@ -53,7 +54,7 @@ export class GameService implements IGameService {
                 let response: Board | string = this.boardService.movePiece(initialFile, initialRank, goalFile, goalRank); 
                 // Move could not be made.
                 if (typeof response === 'string') {
-                    return response;
+                    return new Message(response);
                 } else { // Move has been done.
                     this.currentGame.setBoard(response);
                     this.currentGame.setMove(currentMove + 1);
@@ -61,10 +62,10 @@ export class GameService implements IGameService {
                     return this.currentGame;
                 }
             } else {
-                return "Move cannot be made. It is the other player's turn.";
+                return new Message("Move cannot be made. It is the other player's turn.");
             }
         } else {
-            return "Current square is empty. Try again at another square.";
+            return new Message("Current square is empty. Try again at another square.");
         }
     }
 }
