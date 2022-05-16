@@ -1,4 +1,5 @@
 import { Color, Rank, File, PieceType } from '../shared/types';
+import { Square } from './square';
 
 export abstract class Piece {
 
@@ -6,6 +7,13 @@ export abstract class Piece {
                 private readonly color: Color,
                 private file: File,
                 private rank: Rank) {}
+
+    abstract canMoveTo(targetSquare: Square): boolean;
+
+    isTargetSquareCurrentSquare(targetSquare: Square): boolean {
+        return targetSquare.getFile() === this.file &&
+                targetSquare.getRank() === this.rank;
+    }
 
     moveTo(file: File, rank: Rank) {
         this.file = file;
