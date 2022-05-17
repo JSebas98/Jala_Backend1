@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for entity/piece.ts</title>
+    <title>Code coverage report for entity/game.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">entity</a> piece.ts</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">entity</a> game.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">82.35% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/14</span>
+                <span class='fraction'>14/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.77% </span>
+                <span class="strong">72.72% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/9</span>
+                <span class='fraction'>8/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">82.35% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/14</span>
+                <span class='fraction'>14/17</span>
             </div>
         
             
@@ -108,39 +108,27 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">136x</span>
-<span class="cline-any cline-yes">136x</span>
-<span class="cline-any cline-yes">136x</span>
-<span class="cline-any cline-yes">136x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2434x</span>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
-<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">685x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3373x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1366x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -151,52 +139,88 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">38x</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Color, Rank, File, PieceType } from '../shared/types';
-import { Square } from './square';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">70x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Board } from './board';
+import { Player } from './player';
+import { GameStatus, Color } from '../shared/types';
 &nbsp;
-export abstract class Piece {
+export class Game {
 &nbsp;
-    constructor(private readonly pieceType: PieceType,
-                private readonly color: Color,
-                private file: File,
-                private rank: Rank) {}
+    private move: number = 0;
+    private status: GameStatus = 'Ready to start';
+    private turn: Color = 'White';
 &nbsp;
-    abstract canMoveTo(targetSquare: Square): boolean;
+    constructor(private id: number,
+                private players: Player[],
+                private board: Board){}
 &nbsp;
-    isTargetSquareCurrentSquare(targetSquare: Square): boolean {
-        return targetSquare.getFile() === this.file &amp;&amp;
-                targetSquare.getRank() === this.rank;
+<span class="fstat-no" title="function not covered" >    getId(</span>): number {
+<span class="cstat-no" title="statement not covered" >        return this.id;</span>
     }
 &nbsp;
-    moveTo(file: File, rank: Rank) {
-        this.file = file;
-        this.rank = rank;
+<span class="fstat-no" title="function not covered" >    getBoard(</span>): Board {
+<span class="cstat-no" title="statement not covered" >        return this.board;</span>
     }
 &nbsp;
-    getColor(): Color {
-        return this.color;
+    setBoard(board: Board): void {
+        this.board = board;
     }
 &nbsp;
-    getFile(): File {
-        return this.file;
+<span class="fstat-no" title="function not covered" >    getPlayers(</span>): Player[] {
+<span class="cstat-no" title="statement not covered" >        return this.players;</span>
     }
 &nbsp;
-    getRank(): Rank {
-        return this.rank;
+    getMove(): number {
+        return this.move;
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    setFile(</span>file: File): void {
-<span class="cstat-no" title="statement not covered" >        this.file = file;</span>
+    setMove(move: number): void {
+        this.move = move;
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    setRank(</span>rank: Rank): void {
-<span class="cstat-no" title="statement not covered" >        this.rank = rank;</span>
+    getStatus(): GameStatus {
+        return this.status;
     }
 &nbsp;
-    getType(): PieceType {
-        return this.pieceType;
+    setStatus(status: GameStatus): void {
+        this.status = status;
+    }
+&nbsp;
+    getTurn(): Color {
+        return this.turn;
+    }
+&nbsp;
+    setTurn(turn: Color): void {
+        this.turn = turn;
     }
 }</pre></td></tr></table></pre>
 

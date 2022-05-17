@@ -20,7 +20,7 @@ const gameService = new GameService(boardService);
 // Endpoints
 
 // Create new game
-app.post('/game', (request, response) => {
+app.post('/new', (request, response) => {
     response.status(201).json(gameService.createNewGame());
 });
 
@@ -33,6 +33,31 @@ app.get('/game', (request, response) => {
     }
 
 });
+
+app.get('/rook/err', (req, res) => {
+    gameService.movePiece('H', 2, 'H', 4);
+    gameService.movePiece('H', 7, 'H', 6);
+    gameService.movePiece('G', 2, 'G', 3);
+    gameService.movePiece('B', 7, 'B', 6);
+    gameService.movePiece('H', 1, 'H', 3);
+    gameService.movePiece('C', 7, 'C', 6);
+    res.status(400).json(gameService.movePiece('H', 3, 'D', 3));
+})
+
+app.get('/pawn/err1', (req, res) => {
+    gameService.movePiece('E', 2, 'E', 3);
+    gameService.movePiece('E', 7, 'D', 6);
+    gameService.movePiece('A', 2, 'A', 3);
+    res.status(400).json(gameService.movePiece('D', 7, 'D', 5));
+})
+
+app.get('/pawn/err2', (req, res) => {
+    gameService.movePiece('E', 2, 'E', 3);
+    gameService.movePiece('E', 7, 'D', 6);
+    gameService.movePiece('A', 2, 'A', 3);
+    res.status(400).json(gameService.movePiece('C', 7, 'D', 6));
+})
+
 
 // Restart game
 app.post('/game/restart', (request, response) => {

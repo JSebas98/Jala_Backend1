@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Board } from "../entity/board";
 import { Rook } from "../entity/rook";
 import { Square } from "../entity/square";

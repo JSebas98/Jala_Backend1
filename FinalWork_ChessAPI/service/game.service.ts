@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { IBoardService } from './IBoardService';
 import { inject, injectable } from 'inversify';
 import { IGameService } from './IGameService';

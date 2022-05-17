@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { injectable } from "inversify";
 import { Square } from '../entity/square';
 import { IPieceService } from './IPieceService';
@@ -84,7 +85,7 @@ export class PieceService implements IPieceService {
     
             if (currentRank > targetRank &&
                 currentFileAsNumber > targetFileAsNumber) {
-                    return this.getDiagonalDownRightPath(currentSquare, targetSquare, board, boardSquares);
+                    return this.getDiagonalDownLeftPath(currentSquare, targetSquare, board, boardSquares);
             }
         }
 
@@ -117,7 +118,7 @@ export class PieceService implements IPieceService {
 
         if (currentRank > targetRank &&
             currentFileAsNumber > targetFileAsNumber) {
-                return this.getDiagonalDownRightPath(currentSquare, targetSquare, board, boardSquares);
+                return this.getDiagonalDownLeftPath(currentSquare, targetSquare, board, boardSquares);
         }
 
         return pathToTarget;
