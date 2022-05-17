@@ -4,7 +4,7 @@ import { IGameService } from './IGameService';
 import { DITypes } from '../shared/inversify.types';
 import { Game } from '../entity/game';
 import { Player } from '../entity/player';
-import { File, Rank, GameStatus } from '../shared/types';
+import { File, Rank, GameStatus, Color } from '../shared/types';
 import { Board } from '../entity/board';
 import { Piece } from '../entity/piece';
 import { Message } from '../entity/message';
@@ -30,6 +30,7 @@ export class GameService implements IGameService {
     restartGame(): Game {
         this.currentGame.setBoard(this.boardService.initBoard());
         this.currentGame.setMove(0);
+        this.currentGame.setTurn('White');
 
         return this.currentGame;
     }
@@ -40,23 +41,39 @@ export class GameService implements IGameService {
         }
     }
 
-    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game | Message {
-        // Get piece in initial square to check color.
-        let piece: Piece | undefined = this.boardService.getPiece(initialFile, initialRank);
-        let currentMove: number = this.currentGame.getMove();
+    isWhiteTurn(): boolean {
+        return this.currentGame.getTurn() === 'White';
+    }
+
+    isBlackTurn(): boolean {
+        return this.currentGame.getTurn() === 'Black';
+    }
+
+    updateTurn(move: number): void {
+        if (move % 2 === 0) {
+            this.currentGame.setTurn('White');
+        } else {
+            this.currentGame.setTurn('Black');
+        }
+    }
+
+    movePiece(initialFile: File, initialRank: Rank, targetFile: File, targetRank: Rank): Game | Message {
+        // Get piece in initial square.
+        const piece: Piece | undefined = this.boardService.getPiece(initialFile, initialRank);
 
         if (piece) {
-            // If move is even and piece to be moved is white, try to move piece OR
-            // If move is odd and piece to be moved is black, try to move piece
-            if ((currentMove % 2 === 0 && piece.getColor() === 'White') ||
-            (currentMove % 2 !== 0 && piece.getColor() === 'Black')) {
-                let response: Board | string = this.boardService.movePiece(initialFile, initialRank, goalFile, goalRank); 
+            if (this.isWhiteTurn() && piece.getColor() === 'White' ||
+                this.isBlackTurn() && piece.getColor() === 'Black') {
+
+                const response: Board | string = this.boardService.movePiece(piece, targetFile, targetRank);
                 // Move could not be made.
                 if (typeof response === 'string') {
                     return new Message(response);
                 } else { // Move has been done.
+                    const currentMove: number = this.currentGame.getMove();
                     this.currentGame.setBoard(response);
-                    this.currentGame.setMove(currentMove + 1);
+                    this.currentGame.setMove(currentMove+ 1);
+                    this.updateTurn(currentMove+ 1);
                     this.updateGameStatus();
                     return this.currentGame;
                 }

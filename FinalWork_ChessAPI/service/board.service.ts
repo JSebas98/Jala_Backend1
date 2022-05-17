@@ -8,16 +8,17 @@ import { Queen } from "../entity/queen";
 import { King } from "../entity/king";
 import { Pawn } from '../entity/pawn';
 import { IBoardService } from './IBoardService';
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import { Piece } from "../entity/piece";
-import { Message } from '../entity/message';
+import { DITypes } from "../shared/inversify.types";
+import { IPieceService } from "./IPieceService";
 
 @injectable()
 export class BoardService implements IBoardService {
     
     private currentBoard!: Board;
 
-    constructor(){}
+    constructor(@inject(DITypes.IPieceService) private pieceService: IPieceService){}
     
     /**
      * Generates a new board with all the pieces in their initial squares.
@@ -25,7 +26,7 @@ export class BoardService implements IBoardService {
      */
     initBoard(): Board {
         // Creating board with 64 empty squares.
-        let squares: Square[] = [];
+        const squares: Square[] = [];
         const CHAR_CODE_FOR_A = 65;
 
         for (let rank=1; rank<9; rank++) {
@@ -78,7 +79,7 @@ export class BoardService implements IBoardService {
             }
         }
 
-        let initializedBoard = new Board(squares);
+        const initializedBoard = new Board(squares);
         this.currentBoard = initializedBoard;
 
         return initializedBoard;
@@ -97,22 +98,42 @@ export class BoardService implements IBoardService {
         return squares[this.currentBoard.findIndexSquare(file, rank)];
     }
 
-    movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Board | string {
+    isTargetSquareAvailable(targetSquare: Square, availableSquares: Square[]): boolean {
+        const index: number = availableSquares.indexOf(targetSquare);
+        if (index === -1) {
+            return false;
+        } else {
+            return true;
+        } 
+    }
+
+    movePiece(piece: Piece, targetFile: File, targetRank: Rank): Board | string {
         // Get current and goal squares.
-        const currentSquare: Square = this.getSquare(initialFile, initialRank);
-        const goalSquare: Square = this.getSquare(goalFile, goalRank);
+        const currentSquare: Square = this.getSquare(piece.getFile(), piece.getRank());
+        const targetSquare: Square = this.getSquare(targetFile, targetRank);
+        const availableMoves: Square[] = this.pieceService.getPossibleMoves(piece, this.currentBoard);
+        const pathToTarget: Square[] = this.pieceService.getPathToTargetSquare(piece, currentSquare, targetSquare, this.currentBoard);
 
-        // Check if goal square is available
-        if(goalSquare.isEmpty()) {
-            let piece: Piece | undefined = currentSquare.removePiece();
-            if (piece) {
-                piece.moveTo(goalFile, goalRank);
-                goalSquare.setPiece(piece);
-            };
-
+        if (this.isTargetSquareAvailable(targetSquare, availableMoves) &&
+            this.isPathToTargetFree(pathToTarget)) {
+            currentSquare.removePiece();
+            targetSquare.setPiece(piece);
+            piece.moveTo(targetFile, targetRank);
+            
             return this.currentBoard;
         } else {
-            return "Move could not be made. Goal square is occupied. Try again with another square.";
+            return "Invalid move. Try again with another Target square.";
         }
+    }
+
+    isPathToTargetFree(pathToTarget: Square[]): boolean {
+        let isFree: boolean = true;
+        pathToTarget.forEach((square) => {
+            if (!square.isEmpty()) {
+                isFree = false
+            };
+        });
+
+        return isFree;
     }
 }

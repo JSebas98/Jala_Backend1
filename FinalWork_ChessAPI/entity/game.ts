@@ -1,11 +1,12 @@
 import { Board } from './board';
 import { Player } from './player';
-import { GameStatus } from '../shared/types';
+import { GameStatus, Color } from '../shared/types';
 
 export class Game {
 
     private move: number = 0;
     private status: GameStatus = 'Ready to start';
+    private turn: Color = 'White';
 
     constructor(private id: number,
                 private players: Player[],
@@ -41,5 +42,13 @@ export class Game {
 
     setStatus(status: GameStatus): void {
         this.status = status;
+    }
+
+    getTurn(): Color {
+        return this.turn;
+    }
+
+    setTurn(turn: Color): void {
+        this.turn = turn;
     }
 }

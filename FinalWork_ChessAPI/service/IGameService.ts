@@ -1,5 +1,4 @@
 import { Game } from "../entity/game";
-import { Square } from "../entity/square";
 import { File, Rank } from "../shared/types";
 import { Message } from '../entity/message';
 
