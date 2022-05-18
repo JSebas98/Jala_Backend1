@@ -11,7 +11,6 @@ const bishop: Bishop = new Bishop('Bishop', 'Black', 'D', 4);
 const pieceService: PieceService = new PieceService();
 const boardService: BoardService = new BoardService(pieceService);
 const gameService: GameService = new GameService(boardService);
-const game: Game = gameService.createNewGame();
 const message: Message = new Message('Invalid move. Try again with another Target square.');
 
 describe('Test Bishop moves', () =>{
@@ -77,19 +76,23 @@ describe('Test Bishop moves', () =>{
     // });
 
     it('Should not move if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         expect(gameService.movePiece('C', 1, 'F', 4)).toStrictEqual(message);
     });
 
     it('Should not move if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         expect(gameService.movePiece('F', 1, 'A', 6)).toStrictEqual(message);
     });
 
     it('Should not move if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('E', 2, 'E', 3);
         expect(gameService.movePiece('C', 8, 'H', 3)).toStrictEqual(message);
     });
 
     it('Should not move if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('E', 2, 'E', 3);
         expect(gameService.movePiece('F', 8, 'A', 3)).toStrictEqual(message);
     });

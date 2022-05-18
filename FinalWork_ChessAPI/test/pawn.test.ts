@@ -12,7 +12,6 @@ const blackPawn = new Pawn('Pawn', 'Black', 'E', 7);
 const pieceService: PieceService = new PieceService();
 const boardService: BoardService = new BoardService(pieceService);
 const gameService: GameService = new GameService(boardService);
-const game: Game = gameService.createNewGame();
 const message: Message = new Message('Invalid move. Try again with another Target square.');
 
 describe('Test Pawn moves', () => {
@@ -127,30 +126,33 @@ describe('Test Pawn moves', () => {
     //     expect(blackPawn.canMoveTo(square)).toBe(false);
     // });
 
-    it('Should not move if there is any piece blocking its way', () => {
+    it('White should not move two places if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('E', 2, 'D', 3);
         gameService.movePiece('E', 7, 'E', 6);
         expect(gameService.movePiece('D', 2, 'D', 4)).toStrictEqual(message);
     });
 
-    it('Should not move if there is any piece blocking its way', () => {
+    it('White should not move diagonally if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('E', 2, 'D', 3);
         gameService.movePiece('E', 7, 'E', 6);
         expect(gameService.movePiece('C', 2, 'D', 3)).toStrictEqual(message);
     });
 
-    it('Should not move if there is any piece blocking its way', () => {
-        gameService.movePiece('E', 2, 'E', 3);
-        gameService.movePiece('E', 7, 'D', 6);
-        gameService.movePiece('A', 2, 'A', 3);
-        expect(gameService.movePiece('D', 7, 'D', 5)).toStrictEqual(message);
-    });
-
-    it('Should not move if there is any piece blocking its way', () => {
+    it('Black should not move diagonally if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('E', 2, 'E', 3);
         gameService.movePiece('E', 7, 'D', 6);
         gameService.movePiece('A', 2, 'A', 3);
         expect(gameService.movePiece('C', 7, 'D', 6)).toStrictEqual(message);
     });
-
+    
+    it('Black should not move two places if there is any piece blocking its way', () => {
+        gameService.createNewGame();
+        gameService.movePiece('E', 2, 'E', 3);
+        gameService.movePiece('E', 7, 'D', 6);
+        gameService.movePiece('A', 2, 'A', 3);
+        expect(gameService.movePiece('D', 7, 'D', 5)).toStrictEqual(message);
+    });
 })

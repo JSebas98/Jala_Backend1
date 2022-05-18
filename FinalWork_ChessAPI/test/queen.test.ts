@@ -11,7 +11,6 @@ const queen: Queen = new Queen('Queen', 'Black', 'D', 4);
 const pieceService: PieceService = new PieceService();
 const boardService: BoardService = new BoardService(pieceService);
 const gameService: GameService = new GameService(boardService);
-const game: Game = gameService.createNewGame();
 const message: Message = new Message('Invalid move. Try again with another Target square.');
 
 describe('Test Queen moves', () =>{
@@ -77,28 +76,34 @@ describe('Test Queen moves', () =>{
     // });
 
     it('Should not move if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         expect(gameService.movePiece('D', 1, 'D', 4)).toStrictEqual(message);
     });
 
     it('Should not move if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         expect(gameService.movePiece('D', 1, 'A', 4)).toStrictEqual(message);
     });
 
     it('Should not move if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         expect(gameService.movePiece('D', 1, 'H', 5)).toStrictEqual(message);
     });
 
     it('Should not move if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('E', 2, 'E', 3);
         expect(gameService.movePiece('D', 8, 'D', 5)).toStrictEqual(message);
     });
 
     it('Should not move if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('E', 2, 'E', 3);
         expect(gameService.movePiece('D', 8, 'A', 5)).toStrictEqual(message);
     });
 
     it('Should not move if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('E', 2, 'E', 3);
         expect(gameService.movePiece('D', 8, 'H', 4)).toStrictEqual(message);
     });

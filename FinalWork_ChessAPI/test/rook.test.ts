@@ -11,7 +11,6 @@ const rook: Rook = new Rook('Bishop', 'Black', 'D', 4);
 const pieceService: PieceService = new PieceService();
 const boardService: BoardService = new BoardService(pieceService);
 const gameService: GameService = new GameService(boardService);
-const game: Game = gameService.createNewGame();
 const message: Message = new Message('Invalid move. Try again with another Target square.');
 
 describe('Test Rook moves', () =>{
@@ -66,15 +65,30 @@ describe('Test Rook moves', () =>{
     //     expect(rook.canMoveTo(square)).toBe(false);
     // });
 
-    it('Should not move if there is any piece blocking its way', () => {
+    it('White should not move vertically if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         expect(gameService.movePiece('A', 1, 'A', 4)).toStrictEqual(message);
     });
 
-    it('Should not move if there is any piece blocking its way', () => {
+    it('White should not move vertically if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         expect(gameService.movePiece('H', 1, 'H', 4)).toStrictEqual(message);
     });
 
-    it('Should not move if there is any piece blocking its way', () => {
+    it('Black should not move vertically if there is any piece blocking its way', () => {
+        gameService.createNewGame();
+        gameService.movePiece('E', 2, 'E', 3);
+        expect(gameService.movePiece('A', 8, 'A', 5)).toStrictEqual(message);
+    });
+
+    it('Black should not move vertically if there is any piece blocking its way', () => {
+        gameService.createNewGame();
+        gameService.movePiece('E', 2, 'E', 3);
+        expect(gameService.movePiece('H', 8, 'H', 5)).toStrictEqual(message);
+    });
+
+    it('White should not move horizontally right if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('A', 2, 'A', 4);
         gameService.movePiece('A', 7, 'A', 6);
         gameService.movePiece('B', 2, 'B', 3);
@@ -84,27 +98,8 @@ describe('Test Rook moves', () =>{
         expect(gameService.movePiece('A', 3, 'D', 3)).toStrictEqual(message);
     });
 
-    it('Should not move if there is any piece blocking its way', () => {
-        gameService.movePiece('H', 2, 'H', 4);
-        gameService.movePiece('H', 7, 'H', 6);
-        gameService.movePiece('G', 2, 'G', 3);
-        gameService.movePiece('B', 7, 'B', 6);
-        gameService.movePiece('H', 1, 'H', 3);
-        gameService.movePiece('C', 7, 'C', 6);
-        expect(gameService.movePiece('H', 3, 'D', 3)).toStrictEqual(message);
-    });
-
-    it('Should not move if there is any piece blocking its way', () => {
-        gameService.movePiece('E', 2, 'E', 3);
-        expect(gameService.movePiece('A', 8, 'A', 5)).toStrictEqual(message);
-    });
-
-    it('Should not move if there is any piece blocking its way', () => {
-        gameService.movePiece('E', 2, 'E', 3);
-        expect(gameService.movePiece('H', 8, 'H', 5)).toStrictEqual(message);
-    });
-
-    it('Should not move if there is any piece blocking its way', () => {
+    it('Black should not move horizontally right if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('A', 2, 'A', 3);
         gameService.movePiece('A', 7, 'A', 5);
         gameService.movePiece('B', 2, 'B', 3);
@@ -115,7 +110,8 @@ describe('Test Rook moves', () =>{
         expect(gameService.movePiece('A', 6, 'D', 6)).toStrictEqual(message);
     });
 
-    it('Should not move if there is any piece blocking its way', () => {
+    it('Black should not move horizontally left if there is any piece blocking its way', () => {
+        gameService.createNewGame();
         gameService.movePiece('A', 2, 'A', 3);
         gameService.movePiece('H', 7, 'H', 5);
         gameService.movePiece('B', 2, 'B', 3);
@@ -124,5 +120,16 @@ describe('Test Rook moves', () =>{
         gameService.movePiece('H', 8, 'H', 6);
         gameService.movePiece('D', 2, 'D', 3);
         expect(gameService.movePiece('H', 6, 'D', 6)).toStrictEqual(message);
+    });
+
+    it('White should not move horizontally left if there is any piece blocking its way', () => {
+        gameService.createNewGame();
+        gameService.movePiece('H', 2, 'H', 4);
+        gameService.movePiece('H', 7, 'H', 6);
+        gameService.movePiece('G', 2, 'G', 3);
+        gameService.movePiece('B', 7, 'B', 6);
+        gameService.movePiece('H', 1, 'H', 3);
+        gameService.movePiece('C', 7, 'C', 6);
+        expect(gameService.movePiece('H', 3, 'D', 3)).toStrictEqual(message);
     });
 });
