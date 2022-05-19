@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { Board } from "../entity/board";
 import { Rook } from "../entity/rook";
 import { Square } from "../entity/square";
-import { File, Rank, Color } from '../shared/types';
+import { File, Rank, Color, GamePieces } from '../shared/types';
 import { Knight } from '../entity/knight';
 import { Bishop } from '../entity/bishop';
 import { Queen } from "../entity/queen";
@@ -13,6 +13,7 @@ import { inject, injectable } from "inversify";
 import { Piece } from "../entity/piece";
 import { DITypes } from "../shared/inversify.types";
 import { IPieceService } from "./IPieceService";
+import { oppositeColor } from '../shared/oppositeColor.mapper';
 
 @injectable()
 export class BoardService implements IBoardService {
@@ -93,30 +94,28 @@ export class BoardService implements IBoardService {
     }
 
     getSquare(file: File, rank: Rank): Square {
-        // Get squares of current board.
         const squares: Square[] = this.currentBoard.getSquares();
 
         return squares[this.currentBoard.findIndexSquare(file, rank)];
     }
 
-    isTargetSquareAvailable(targetSquare: Square, availableSquares: Square[]): boolean {
-        const index: number = availableSquares.indexOf(targetSquare);
-        if (index === -1) {
-            return false;
-        } else {
-            return true;
-        } 
+    isMovePossible(piece: Piece, targetSquare: Square): boolean {
+
+        if (this.pieceService.isKing(piece)) {
+            const attackedSquares: Square[] = this.getAttackedSquares(piece.getColor());
+            return !this.isKingOnCheck(targetSquare, attackedSquares);
+        }
+
+        const availableSquares: Square[] = this.pieceService.getPossibleMoves(piece, this.currentBoard);
+        
+        return availableSquares.includes(targetSquare); 
     }
 
     movePiece(piece: Piece, targetFile: File, targetRank: Rank): Board | string {
-        // Get current and goal squares.
         const currentSquare: Square = this.getSquare(piece.getFile(), piece.getRank());
         const targetSquare: Square = this.getSquare(targetFile, targetRank);
-        const availableMoves: Square[] = this.pieceService.getPossibleMoves(piece, this.currentBoard);
-        const pathToTarget: Square[] = this.pieceService.getPathToTargetSquare(piece, currentSquare, targetSquare, this.currentBoard);
 
-        if (this.isTargetSquareAvailable(targetSquare, availableMoves) &&
-            this.isPathToTargetFree(pathToTarget)) {
+        if (this.isMovePossible(piece, targetSquare)) {
             currentSquare.removePiece();
             targetSquare.setPiece(piece);
             piece.moveTo(targetFile, targetRank);
@@ -127,14 +126,46 @@ export class BoardService implements IBoardService {
         }
     }
 
-    isPathToTargetFree(pathToTarget: Square[]): boolean {
-        let isFree: boolean = true;
-        pathToTarget.forEach((square) => {
-            if (!square.isEmpty()) {
-                isFree = false
-            };
+    getPlayingPieces(): GamePieces {
+        const whitePieces: Piece[] = [];
+        const blackPieces: Piece[] = [];
+
+        this.currentBoard.getSquares().forEach((square) => {
+            let piece: Piece | undefined = square.getPiece();
+            if (piece?.getColor() === 'White') {
+                whitePieces.push(piece);
+            }
+            if (piece?.getColor() === 'Black') {
+                blackPieces.push(piece);
+            }
         });
 
-        return isFree;
+        let gamePieces: GamePieces = {
+            'White': whitePieces,
+            'Black': blackPieces
+        };
+
+        return gamePieces;
     }
+
+    getAttackedSquares(color: Color): Square[] {
+        const attackedSquares: Square[] = [];
+        const playingPieces: GamePieces = this.getPlayingPieces();
+        const piecesToCheck: Piece[] = playingPieces[color];
+
+        piecesToCheck.forEach((piece) => {
+            const possibleMoves: Square[] = this.pieceService.getPossibleMoves(piece, this.currentBoard); 
+            possibleMoves.forEach((square) => {
+                attackedSquares.push(square);
+            })
+        });
+
+        return attackedSquares;
+    }
+
+    isKingOnCheck(kingSquare: Square, attackedSquares: Square[]): boolean {
+        return attackedSquares.includes(kingSquare);
+    }
+
+
 }

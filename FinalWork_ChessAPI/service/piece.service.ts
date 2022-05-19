@@ -5,23 +5,52 @@ import { IPieceService } from './IPieceService';
 import { Piece } from '../entity/piece';
 import { Board } from "../entity/board";
 import { FileMapper, turnNumberIntoFile } from '../shared/file.mapper';
-import { File, Rank } from '../shared/types';
+import { File, GamePieces, Rank } from '../shared/types';
 
 @injectable()
 export class PieceService implements IPieceService {
+
+    constructor() {
+
+    };
     
     getPossibleMoves(piece: Piece, board: Board): Square[] {
-        let availableSquares: Square[] = [];
+        const availableSquares: Square[] = [];
         const boardSquares: Square[] = board.getSquares();
+        const indexCurrentSquare: number = board.findIndexSquare(piece.getFile(), piece.getRank());
+        const currentSquare: Square = boardSquares[indexCurrentSquare];
 
         for(let i: number = 0; i<boardSquares.length; i++) {
-            let square: Square = boardSquares[i];
-            if (piece.canMoveTo(square)) {
-                availableSquares.push(square);
+            let targetSquare: Square = boardSquares[i];
+            if (piece.canMoveTo(targetSquare)) {
+                const pathToTarget: Square[] = this.getPathToTargetSquare(piece, currentSquare, targetSquare, board);
+                if (this.isPathToTargetFree(pathToTarget)) {
+                    availableSquares.push(targetSquare);
+                }
             }
         }
         
         return availableSquares;
+    }
+
+    isKing(piece: Piece): boolean {
+        return piece.getType() === 'King';
+    }
+
+    isTargetSquareAttacked(square: Square, attackedSquares: Square[]): boolean {
+        return attackedSquares.includes(square);
+    }
+
+    isPathToTargetFree(pathToTarget: Square[]): boolean {
+        let isFree: boolean = true;
+
+        pathToTarget.forEach((square) => {
+            if (!square.isEmpty()) {
+                isFree = false
+            };
+        });
+
+        return isFree;
     }
 
     getPathToTargetSquare(piece: Piece, currentSquare: Square, targetSquare: Square, board: Board): Square[] {
@@ -129,7 +158,6 @@ export class PieceService implements IPieceService {
         const boardSquares: Square[] = board.getSquares();
         const currentRank: Rank = currentSquare.getRank();
         const targetRank: Rank = targetSquare.getRank();
-        const currentFile: File = currentSquare.getFile();
 
         if (this.isMoveVertical(currentSquare, targetSquare)) {
             if (currentRank < targetRank) {
@@ -191,14 +219,14 @@ export class PieceService implements IPieceService {
         return FileMapper[currentFile] - FileMapper[targetFile] === 0;
     }
 
-    isMoveHorizontal(currentSquare: Square, targetSquare: Square) {
+    isMoveHorizontal(currentSquare: Square, targetSquare: Square): boolean {
         const currentRank: Rank = currentSquare.getRank();
         const targetRank: Rank = targetSquare.getRank();
 
         return currentRank - targetRank === 0;
     }
 
-    isMoveDiagonal(currentSquare: Square, targetSquare: Square) {
+    isMoveDiagonal(currentSquare: Square, targetSquare: Square): boolean {
         const currentFile: File = currentSquare.getFile();
         const targetFile: File = targetSquare.getFile();
         const currentRank: Rank = currentSquare.getRank();
@@ -214,7 +242,7 @@ export class PieceService implements IPieceService {
         const targetRank: Rank = targetSquare.getRank();
         const currentFile: File = currentSquare.getFile();
 
-        for (let i:number = currentRank + 1; i <= targetRank; i++) {
+        for (let i:number = currentRank + 1; i < targetRank; i++) {
             const squareIndex: number = board.findIndexSquare(currentFile, i as Rank);
             pathToTarget.push(boardSquares[squareIndex]);
         }
@@ -228,7 +256,7 @@ export class PieceService implements IPieceService {
         const targetRank: Rank = targetSquare.getRank();
         const currentFile: File = currentSquare.getFile();
 
-        for (let i:number = currentRank - 1; i >= targetRank; i--) {
+        for (let i:number = currentRank - 1; i > targetRank; i--) {
             const squareIndex: number = board.findIndexSquare(currentFile, i as Rank);
             pathToTarget.push(boardSquares[squareIndex]);
         }
@@ -242,7 +270,7 @@ export class PieceService implements IPieceService {
         const currentFileAsNumber: number = FileMapper[currentSquare.getFile()];
         const targetFileAsNumber: number = FileMapper[targetSquare.getFile()];
 
-        for (let i:number = currentFileAsNumber + 1; i <= targetFileAsNumber; i++) {
+        for (let i:number = currentFileAsNumber + 1; i < targetFileAsNumber; i++) {
             const currentFile: File = turnNumberIntoFile(i);
             const squareIndex: number = board.findIndexSquare(currentFile, currentRank);
             pathToTarget.push(boardSquares[squareIndex])
@@ -257,7 +285,7 @@ export class PieceService implements IPieceService {
         const currentFileAsNumber: number = FileMapper[currentSquare.getFile()];
         const targetFileAsNumber: number = FileMapper[targetSquare.getFile()];
 
-        for (let i:number = currentFileAsNumber - 1; i >= targetFileAsNumber; i--) {
+        for (let i:number = currentFileAsNumber - 1; i > targetFileAsNumber; i--) {
             const currentFile: File = turnNumberIntoFile(i);
             const squareIndex: number = board.findIndexSquare(currentFile, currentRank);
             pathToTarget.push(boardSquares[squareIndex])
@@ -273,7 +301,7 @@ export class PieceService implements IPieceService {
         const currentFileAsNumber: number = FileMapper[currentSquare.getFile()];
         const distanceBetweenSquares: number = Math.abs(currentRank - targetRank);
 
-        for (let i: number = 1; i <= distanceBetweenSquares; i++) {
+        for (let i: number = 1; i < distanceBetweenSquares; i++) {
             const currentFile: File = turnNumberIntoFile(currentFileAsNumber - i);
             const squareIndex: number = board.findIndexSquare(currentFile, (currentRank + i) as Rank);
             pathToTarget.push(boardSquares[squareIndex]);
@@ -289,7 +317,7 @@ export class PieceService implements IPieceService {
         const currentFileAsNumber: number = FileMapper[currentSquare.getFile()];
         const distanceBetweenSquares: number = Math.abs(currentRank - targetRank);
 
-        for (let i: number = 1; i <= distanceBetweenSquares; i++) {
+        for (let i: number = 1; i < distanceBetweenSquares; i++) {
             const currentFile: File = turnNumberIntoFile(currentFileAsNumber + i);
             const squareIndex: number = board.findIndexSquare(currentFile, (currentRank + i) as Rank);
             pathToTarget.push(boardSquares[squareIndex]);
@@ -304,7 +332,7 @@ export class PieceService implements IPieceService {
         const currentFileAsNumber: number = FileMapper[currentSquare.getFile()];
         const distanceBetweenSquares: number = Math.abs(currentRank - targetRank);
 
-        for (let i: number = 1; i <= distanceBetweenSquares; i++) {
+        for (let i: number = 1; i < distanceBetweenSquares; i++) {
             const currentFile: File = turnNumberIntoFile(currentFileAsNumber + i);
             const squareIndex: number = board.findIndexSquare(currentFile, (currentRank - i) as Rank);
             pathToTarget.push(boardSquares[squareIndex]);
@@ -319,14 +347,12 @@ export class PieceService implements IPieceService {
         const currentFileAsNumber: number = FileMapper[currentSquare.getFile()];
         const distanceBetweenSquares: number = Math.abs(currentRank - targetRank);
 
-        for (let i: number = 1; i <= distanceBetweenSquares; i++) {
+        for (let i: number = 1; i < distanceBetweenSquares; i++) {
             const currentFile: File = turnNumberIntoFile(currentFileAsNumber - i);
             const squareIndex: number = board.findIndexSquare(currentFile, (currentRank - i) as Rank);
             pathToTarget.push(boardSquares[squareIndex]);
         }
         return pathToTarget;
     }
-
-    
 
 }
