@@ -7,7 +7,7 @@ import { GameService } from '../service/game.service';
 import { Game } from '../entity/game';
 import { Message } from '../entity/message';
 
-const rook: Rook = new Rook('Bishop', 'Black', 'D', 4);
+const rook: Rook = new Rook('Rook', 'Black', 'D', 4);
 const pieceService: PieceService = new PieceService();
 const boardService: BoardService = new BoardService(pieceService);
 const gameService: GameService = new GameService(boardService);
@@ -15,55 +15,60 @@ const message: Message = new Message('Invalid move. Try again with another Targe
 
 describe('Test Rook moves', () =>{
 
-    // it('Should move up', () => {
-    //     let square = new Square('D', 8);
-    //     expect(rook.canMoveTo(square)).toBe(true);
-    // });
+    it('Should move up', () => {
+        let square = new Square('D', 8);
+        expect(rook.canMoveTo(square)).toBe(true);
+    });
 
-    // it('Should move down', () => {
-    //     let square = new Square('D', 1);
-    //     expect(rook.canMoveTo(square)).toBe(true);
-    // });
+    it('Should move down', () => {
+        let square = new Square('D', 1);
+        expect(rook.canMoveTo(square)).toBe(true);
+    });
 
-    // it('Should move left', () => {
-    //     let square = new Square('A', 4);
-    //     expect(rook.canMoveTo(square)).toBe(true);
-    // });
+    it('Should move left', () => {
+        let square = new Square('A', 4);
+        expect(rook.canMoveTo(square)).toBe(true);
+    });
 
-    // it('Should move right', () => {
-    //     let square = new Square('H', 4);
-    //     expect(rook.canMoveTo(square)).toBe(true);
-    // });
+    it('Should move right', () => {
+        let square = new Square('H', 4);
+        expect(rook.canMoveTo(square)).toBe(true);
+    });
 
-    // it('Should not move diagonally up left', () => {
-    //     let square = new Square('C', 5);
-    //     expect(rook.canMoveTo(square)).toBe(false);
-    // });
+    it('Should not move diagonally up left', () => {
+        let square = new Square('C', 5);
+        expect(rook.canMoveTo(square)).toBe(false);
+    });
 
-    // it('Should not move diagonally up right', () => {
-    //     let square = new Square('E', 5);
-    //     expect(rook.canMoveTo(square)).toBe(false);
-    // });
+    it('Should not move diagonally up right', () => {
+        let square = new Square('E', 5);
+        expect(rook.canMoveTo(square)).toBe(false);
+    });
 
-    // it('Should not move diagonally down left', () => {
-    //     let square = new Square('C', 3);
-    //     expect(rook.canMoveTo(square)).toBe(false);
-    // });
+    it('Should not move diagonally down left', () => {
+        let square = new Square('C', 3);
+        expect(rook.canMoveTo(square)).toBe(false);
+    });
 
-    // it('Should not move diagonally down right', () => {
-    //     let square = new Square('E', 3);
-    //     expect(rook.canMoveTo(square)).toBe(false);
-    // });
+    it('Should not move diagonally down right', () => {
+        let square = new Square('E', 3);
+        expect(rook.canMoveTo(square)).toBe(false);
+    });
 
-    // it('Should not move to its current position', () => {
-    //     let square = new Square('D', 4);
-    //     expect(rook.canMoveTo(square)).toBe(false);
-    // });
+    it('Should not move to its current position', () => {
+        let square = new Square('D', 4);
+        expect(rook.canMoveTo(square)).toBe(false);
+    });
 
-    // it('Should not move to an occupied square', () => {
-    //     let square = new Square('D', 5, new Pawn('Pawn', 'White', 'D', 5));
-    //     expect(rook.canMoveTo(square)).toBe(false);
-    // });
+    it('Should not move to a square occupied by a piece of its color', () => {
+        let square = new Square('D', 5, new Pawn('Pawn', 'Black', 'D', 5));
+        expect(rook.canMoveTo(square)).toBe(false);
+    });
+
+    it('Should move to a square occupied by the adversary', () => {
+        let square = new Square('D', 5, new Pawn('Pawn', 'White', 'D', 5));
+        expect(rook.canMoveTo(square)).toBe(true);
+    });
 
     it('White should not move vertically if there is any piece blocking its way', () => {
         gameService.createNewGame();

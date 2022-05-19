@@ -1,10 +1,8 @@
+import { oppositeColor } from '../shared/oppositeColor.mapper';
 import { File, Rank, Color } from '../shared/types';
 import { Piece } from "./piece";
 
 export class Square {
-    
-    private controlledByWhite: boolean = false;
-    private controlledByBlack: boolean = false;
 
     constructor(private file: File,
                 private rank: Rank,
@@ -38,37 +36,11 @@ export class Square {
         return this.piece === undefined;
     }
 
-    setControlledBy(color: Color): void {
-        if(color === 'White') {
-            this.controlledByWhite = true;
-        }
-
-        if(color === 'Black') {
-            this.controlledByBlack = true;
-        }
+    isOccupiedByAdversary(pieceColor: Color): boolean {
+        return this.piece?.getColor() === oppositeColor[pieceColor];
     }
 
-    getControlledBy(): Color[] {
-        let controlledBy: Color[] = [];
-        
-        if(this.controlledByBlack) {
-            controlledBy.push('Black');
-        }
-
-        if(this.controlledByWhite) {
-            controlledBy.push('White');
-        }
-
-        return controlledBy;
-    }
-
-    removeControlledBy(color: Color): void {
-        if(color === 'White') {
-            this.controlledByWhite = false;
-        }
-
-        if(color === 'Black') {
-            this.controlledByBlack = false;
-        }
+    isAvailable(pieceColor: Color): boolean {
+        return this.isEmpty() || this.isOccupiedByAdversary(pieceColor);
     }
 }
