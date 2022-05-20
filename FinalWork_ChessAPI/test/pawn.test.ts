@@ -97,6 +97,26 @@ describe('Test Pawn moves', () => {
         expect(blackPawn.canMoveTo(square)).toBe(false);
     });
 
+    it('White should not move two places if there is any piece blocking its way', () => {
+        gameService.createNewGame();
+        gameService.movePiece('F', 2, 'F', 3);
+        gameService.movePiece('E', 7, 'E', 5);
+        gameService.movePiece('F', 3, 'F', 4);
+        gameService.movePiece('E', 5, 'E', 4);
+        gameService.movePiece('F', 4, 'F', 5);
+        gameService.movePiece('E', 4, 'E', 3);
+        expect(gameService.movePiece('E', 2, 'E', 4)).toStrictEqual(message);
+    });
+
+    it('White should not move if its move puts his king in danger', () => {
+        gameService.createNewGame();
+        gameService.movePiece('E', 2, 'E', 3);
+        gameService.movePiece('E', 7, 'E', 6);
+        gameService.movePiece('D', 2, 'D', 3);
+        gameService.movePiece('D', 8, 'H', 4);
+        expect(gameService.movePiece('F', 2, 'F', 3)).toStrictEqual(message);
+    });
+
     it('Black Pawn should move one place forward', () =>{
         let square = new Square('E', 6);
         expect(blackPawn.canMoveTo(square)).toBe(true);
@@ -177,18 +197,6 @@ describe('Test Pawn moves', () => {
         let square = new Square('E', 6, new Pawn('Pawn', 'White', 'E', 6));
         expect(blackPawn.canMoveTo(square)).toBe(false);
     });
-
-    it('White should not move two places if there is any piece blocking its way', () => {
-        gameService.createNewGame();
-        gameService.movePiece('F', 2, 'F', 3);
-        gameService.movePiece('E', 7, 'E', 5);
-        gameService.movePiece('F', 3, 'F', 4);
-        gameService.movePiece('E', 5, 'E', 4);
-        gameService.movePiece('F', 4, 'F', 5);
-        gameService.movePiece('E', 4, 'E', 3);
-        expect(gameService.movePiece('E', 2, 'E', 4)).toStrictEqual(message);
-    });
-
     
     it('Black should not move two places if there is any piece blocking its way', () => {
         gameService.createNewGame();
@@ -198,5 +206,13 @@ describe('Test Pawn moves', () => {
         gameService.movePiece('F', 6, 'F', 5);
         gameService.movePiece('E', 5, 'E', 6);
         expect(gameService.movePiece('E', 7, 'E', 5)).toStrictEqual(message);
+    });
+
+    it('Black should not move if its move puts his king in danger', () => {
+        gameService.createNewGame();
+        gameService.movePiece('E', 2, 'E', 3);
+        gameService.movePiece('E', 7, 'E', 6);
+        gameService.movePiece('D', 1, 'H', 5);
+        expect(gameService.movePiece('F', 7, 'F', 6)).toStrictEqual(message);
     });
 })
