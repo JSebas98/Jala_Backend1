@@ -1,8 +1,18 @@
 import { Square } from '../entity/square';
 import { Pawn } from '../entity/pawn';
 import { Knight } from '../entity/knight';
+import { PieceService } from '../service/piece.service';
+import { BoardService } from '../service/board.service';
+import { GameService } from '../service/game.service';
+import { Message } from '../entity/message';
+import { Game } from '../entity/game';
 
 const knight: Knight = new Knight('Knight', 'White', 'E', 4);
+
+const pieceService: PieceService = new PieceService();
+const boardService: BoardService = new BoardService(pieceService);
+const gameService: GameService = new GameService(boardService);
+const message: Message = new Message('Invalid move. Try again with another Target square.');
 
 describe('Test Knigh moves', () =>{
 
@@ -89,5 +99,14 @@ describe('Test Knigh moves', () =>{
     it('Should move to a square occupied by the adversary', () => {
         let square = new Square('G', 5, new Pawn('Pawn', 'Black', 'G', 5));
         expect(knight.canMoveTo(square)).toBe(true);
+    });
+
+    it('Should capture a piece of the adversary', () => {
+        gameService.createNewGame();
+        gameService.movePiece('G', 1, 'F', 3);
+        gameService.movePiece('E', 7, 'E', 6);
+        gameService.movePiece('F', 3, 'G', 5);
+        gameService.movePiece('F', 7, 'F', 6);
+        expect(gameService.movePiece('G', 5, 'E', 6)).toBeInstanceOf(Game);
     });
 });

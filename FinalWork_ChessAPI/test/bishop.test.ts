@@ -4,8 +4,8 @@ import { Bishop } from '../entity/bishop';
 import { BoardService } from '../service/board.service';
 import { PieceService } from '../service/piece.service';
 import { GameService } from '../service/game.service';
-import { Game } from '../entity/game';
 import { Message } from '../entity/message';
+import { Game } from '../entity/game';
 
 const bishop: Bishop = new Bishop('Bishop', 'Black', 'D', 4);
 const pieceService: PieceService = new PieceService();
@@ -100,5 +100,14 @@ describe('Test Bishop moves', () =>{
         gameService.createNewGame();
         gameService.movePiece('E', 2, 'E', 3);
         expect(gameService.movePiece('F', 8, 'A', 3)).toStrictEqual(message);
+    });
+
+    it('Should capture a piece of the adversary', () => {
+        gameService.createNewGame();
+        gameService.movePiece('E', 2, 'E', 3);
+        gameService.movePiece('C', 7, 'C', 6);
+        gameService.movePiece('F', 1, 'B', 5);
+        gameService.movePiece('D', 7, 'D', 6);
+        expect(gameService.movePiece('B', 5, 'C', 6)).toBeInstanceOf(Game);
     });
 });

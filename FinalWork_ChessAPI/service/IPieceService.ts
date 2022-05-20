@@ -1,14 +1,14 @@
 import { Square } from "../entity/square";
 import { Piece } from '../entity/piece';
 import { Board } from '../entity/board';
+import { Color } from '../shared/types';
 
 export interface IPieceService {
 
     getPossibleMoves(piece: Piece, board: Board): Square[];
     isKing(piece: Piece): boolean;
-    isTargetSquareAttacked(square: Square, attackedSquares: Square[]): boolean;
     getPathToTargetSquare(piece: Piece, currentSquare: Square, targetSquare: Square, board: Board): Square[];
-    isPathToTargetFree(pathToTarget: Square[]): boolean;
+    isPathToTargetFree(pathToTarget: Square[], pieceColor: Color): boolean;
     getPathToTargetSquare(piece: Piece, currentSquare: Square, targetSquare: Square, board: Board): Square[];
     getPathForQueen(currentSquare: Square, targetSquare: Square, board: Board): Square[];
     getPathForBishop(currentSquare: Square, targetSquare: Square, board: Board): Square[];

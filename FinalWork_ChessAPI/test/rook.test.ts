@@ -137,4 +137,13 @@ describe('Test Rook moves', () =>{
         gameService.movePiece('C', 7, 'C', 6);
         expect(gameService.movePiece('H', 3, 'D', 3)).toStrictEqual(message);
     });
+
+    it('Should capture a piece of the adversary', () => {
+        gameService.createNewGame();
+        gameService.movePiece('H', 2, 'H', 4);
+        gameService.movePiece('D', 7, 'D', 6);
+        gameService.movePiece('A', 2, 'A', 3);
+        gameService.movePiece('C', 8, 'H', 3);
+        expect(gameService.movePiece('H', 1, 'H', 3)).toBeInstanceOf(Game);
+    });
 });

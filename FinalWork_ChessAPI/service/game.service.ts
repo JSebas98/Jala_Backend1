@@ -5,7 +5,7 @@ import { IGameService } from './IGameService';
 import { DITypes } from '../shared/inversify.types';
 import { Game } from '../entity/game';
 import { Player } from '../entity/player';
-import { File, Rank, GameStatus, Color } from '../shared/types';
+import { File, Rank, GameStatus, Color, GamePieces } from '../shared/types';
 import { Board } from '../entity/board';
 import { Piece } from '../entity/piece';
 import { Message } from '../entity/message';
@@ -32,6 +32,10 @@ export class GameService implements IGameService {
         this.currentGame.setBoard(this.boardService.initBoard());
         this.currentGame.setMove(0);
         this.currentGame.setTurn('White');
+        this.currentGame.setCapturedPieces({
+            'White': [],
+            'Black': []
+        });
 
         return this.currentGame;
     }
@@ -59,7 +63,6 @@ export class GameService implements IGameService {
     }
 
     movePiece(initialFile: File, initialRank: Rank, targetFile: File, targetRank: Rank): Game | Message {
-        // Get piece in initial square.
         const piece: Piece | undefined = this.boardService.getPiece(initialFile, initialRank);
 
         if (piece) {
@@ -67,15 +70,16 @@ export class GameService implements IGameService {
                 this.isBlackTurn() && piece.getColor() === 'Black') {
 
                 const response: Board | string = this.boardService.movePiece(piece, targetFile, targetRank);
-                // Move could not be made.
+                
                 if (typeof response === 'string') {
                     return new Message(response);
-                } else { // Move has been done.
+                } else {
                     const currentMove: number = this.currentGame.getMove();
                     this.currentGame.setBoard(response);
                     this.currentGame.setMove(currentMove+ 1);
                     this.updateTurn(currentMove+ 1);
                     this.updateGameStatus();
+                    this.updateCapturedPieces()
                     return this.currentGame;
                 }
             } else {
@@ -84,5 +88,9 @@ export class GameService implements IGameService {
         } else {
             return new Message("Current square is empty. Try again at another square.");
         }
+    }
+
+    updateCapturedPieces(): void {
+        this.currentGame.setCapturedPieces(this.boardService.getCapturedPieces());
     }
 }

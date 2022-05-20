@@ -8,6 +8,10 @@ export interface IGameService {
     getCurrentGame(): Game;
     restartGame(): Game;
     updateGameStatus(): void;
+    isWhiteTurn(): boolean;
+    isBlackTurn(): boolean;
+    updateTurn(move: number): void;
     movePiece(initialFile: File, initialRank: Rank, goalFile: File, goalRank: Rank): Game | Message;
+    updateCapturedPieces(): void;
 
 }

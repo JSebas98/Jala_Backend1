@@ -5,7 +5,7 @@ import { IPieceService } from './IPieceService';
 import { Piece } from '../entity/piece';
 import { Board } from "../entity/board";
 import { FileMapper, turnNumberIntoFile } from '../shared/file.mapper';
-import { File, GamePieces, Rank } from '../shared/types';
+import { File, Rank, Color } from '../shared/types';
 
 @injectable()
 export class PieceService implements IPieceService {
@@ -24,7 +24,7 @@ export class PieceService implements IPieceService {
             let targetSquare: Square = boardSquares[i];
             if (piece.canMoveTo(targetSquare)) {
                 const pathToTarget: Square[] = this.getPathToTargetSquare(piece, currentSquare, targetSquare, board);
-                if (this.isPathToTargetFree(pathToTarget)) {
+                if (this.isPathToTargetFree(pathToTarget, piece.getColor())) {
                     availableSquares.push(targetSquare);
                 }
             }
@@ -37,11 +37,7 @@ export class PieceService implements IPieceService {
         return piece.getType() === 'King';
     }
 
-    isTargetSquareAttacked(square: Square, attackedSquares: Square[]): boolean {
-        return attackedSquares.includes(square);
-    }
-
-    isPathToTargetFree(pathToTarget: Square[]): boolean {
+    isPathToTargetFree(pathToTarget: Square[], pieceColor: Color): boolean {
         let isFree: boolean = true;
 
         pathToTarget.forEach((square) => {
@@ -57,12 +53,16 @@ export class PieceService implements IPieceService {
         switch(piece.getType()) {
             case 'Rook':
                 return this.getPathForRook(currentSquare, targetSquare, board);
+                break;
             case 'Pawn':
                 return this.getPathForPawn(currentSquare, targetSquare, board);
+                break;
             case 'Bishop':
                 return this.getPathForBishop(currentSquare, targetSquare, board);
+                break;
             case 'Queen':
                 return this.getPathForQueen(currentSquare, targetSquare, board);
+                break;
             default:
                 return [];
         }
@@ -175,6 +175,7 @@ export class PieceService implements IPieceService {
 
             const squareIndex: number = board.findIndexSquare(targetFile, targetRank);
             pathToTarget.push(boardSquares[squareIndex]);
+            return pathToTarget;
         }
 
         return pathToTarget;

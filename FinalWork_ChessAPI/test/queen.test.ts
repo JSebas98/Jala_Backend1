@@ -5,6 +5,7 @@ import { PieceService } from '../service/piece.service';
 import { BoardService } from '../service/board.service';
 import { GameService } from '../service/game.service';
 import { Message } from '../entity/message';
+import { Game } from '../entity/game';
 
 const queen: Queen = new Queen('Queen', 'Black', 'D', 4);
 const pieceService: PieceService = new PieceService();
@@ -110,5 +111,14 @@ describe('Test Queen moves', () =>{
         gameService.createNewGame();
         gameService.movePiece('E', 2, 'E', 3);
         expect(gameService.movePiece('D', 8, 'H', 4)).toStrictEqual(message);
+    });
+
+    it('Should capture a piece of the adversary', () => {
+        gameService.createNewGame();
+        gameService.movePiece('E', 2, 'E', 3);
+        gameService.movePiece('E', 7, 'E', 6);
+        gameService.movePiece('D', 1, 'F', 3);
+        gameService.movePiece('F', 7, 'F', 6);
+        expect(gameService.movePiece('F', 3, 'F', 6)).toBeInstanceOf(Game);
     });
 });
