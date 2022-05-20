@@ -79,6 +79,7 @@ export class BoardService implements IBoardService {
 
         const initializedBoard = new Board(squares);
         this.currentBoard = initializedBoard;
+        this.emptyCapturedPieces();
 
         return initializedBoard;
     }
