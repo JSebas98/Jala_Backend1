@@ -117,6 +117,15 @@ describe('Test Pawn moves', () => {
         expect(gameService.movePiece('F', 2, 'F', 3)).toStrictEqual(message);
     });
 
+    it('White should move if that protects its king from check', () => {
+        gameService.createNewGame();
+        gameService.movePiece('F', 2, 'F', 3);
+        gameService.movePiece('E', 7, 'E', 6);
+        gameService.movePiece('D', 2, 'D', 3);
+        gameService.movePiece('D', 8, 'H', 4);
+        expect(gameService.movePiece('G', 2, 'G', 3)).toBeInstanceOf(Game);
+    });
+
     it('Black Pawn should move one place forward', () =>{
         let square = new Square('E', 6);
         expect(blackPawn.canMoveTo(square)).toBe(true);
@@ -214,5 +223,13 @@ describe('Test Pawn moves', () => {
         gameService.movePiece('E', 7, 'E', 6);
         gameService.movePiece('D', 1, 'H', 5);
         expect(gameService.movePiece('F', 7, 'F', 6)).toStrictEqual(message);
+    });
+
+    it('Black should move if that protects its king from check', () => {
+        gameService.createNewGame();
+        gameService.movePiece('E', 2, 'E', 3);
+        gameService.movePiece('F', 7, 'F', 6);
+        gameService.movePiece('D', 1, 'H', 5);
+        expect(gameService.movePiece('G', 7, 'G', 6)).toBeInstanceOf(Game);
     });
 })

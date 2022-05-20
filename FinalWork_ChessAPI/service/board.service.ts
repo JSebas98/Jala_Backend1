@@ -22,12 +22,7 @@ export class BoardService implements IBoardService {
 
     constructor(@inject(DITypes.IPieceService) private pieceService: IPieceService){}
     
-    /**
-     * Generates a new board with all the pieces in their initial squares.
-     * @returns Board with all the pieces.
-     */
     initBoard(): Board {
-        // Creating board with 64 empty squares.
         const squares: Square[] = [];
         const CHAR_CODE_FOR_A = 65;
 
@@ -39,11 +34,9 @@ export class BoardService implements IBoardService {
             }
         }
 
-        // Adding pieces in their initial position.
-        // Adding Rook, Knight, Bishop, Queen, and King.
         const colors: Color[] = ['White', 'Black'];
-        const distOppositePieces = 56; // # of squares between opposite color pieces at initial state.
-        const distOppositePawns = 40; // # of squares between opposite color pawns at initial state.
+        const distOppositePieces = 56;
+        const distOppositePawns = 40;
 
         for(let c=0; c<2; c++) {
             let color = colors[c];
@@ -72,7 +65,6 @@ export class BoardService implements IBoardService {
             square = squares[(c*distOppositePieces)+7]
             square.setPiece(new Rook('Rook', color, square.getFile(), square.getRank()));
 
-            // Adding pawns
             let firstPositionPawn = (c*distOppositePawns)+8;
             let lastPositionPawn = firstPositionPawn+7;
             for(let p=firstPositionPawn; p<=lastPositionPawn; p++) {
@@ -98,7 +90,7 @@ export class BoardService implements IBoardService {
         return squares[this.currentBoard.findIndexSquare(file, rank)];
     }
 
-    isMovePossible(piece: Piece, targetSquare: Square): boolean {
+    isMoveValid(piece: Piece, targetSquare: Square): boolean {
 
         const pieceSquare: Square = this.getSquare(piece.getFile(), piece.getRank());
 
@@ -107,14 +99,11 @@ export class BoardService implements IBoardService {
             return !this.isKingOnCheck(targetSquare, attackedSquares);
         }
 
-        if (!this.doesMovePutKingOnCheck(pieceSquare)) {
-            const availableSquares: Square[] = this.pieceService.getPossibleMoves(piece, this.currentBoard);
-        
-            return availableSquares.includes(targetSquare);
+        if (!this.doesMovePutKingOnCheck(pieceSquare, targetSquare)) {
+            return this.isSquareAvailable(piece, targetSquare);
         } else {
             return false;
         }
-        
          
     }
 
@@ -122,7 +111,7 @@ export class BoardService implements IBoardService {
         const currentSquare: Square = this.getSquare(piece.getFile(), piece.getRank());
         const targetSquare: Square = this.getSquare(targetFile, targetRank);
 
-        if (this.isMovePossible(piece, targetSquare)) {
+        if (this.isMoveValid(piece, targetSquare)) {
             currentSquare.removePiece();
             targetSquare.setPiece(piece);
             piece.moveTo(targetFile, targetRank);
@@ -131,6 +120,12 @@ export class BoardService implements IBoardService {
         } else {
             return "Invalid move. Try again with another Target square.";
         }
+    }
+
+    isSquareAvailable(piece: Piece, targetSquare: Square): boolean {
+        const availableSquares: Square[] = this.pieceService.getPossibleMoves(piece, this.currentBoard);
+        
+        return availableSquares.includes(targetSquare);
     }
 
     getPlayingPieces(): GamePieces {
@@ -182,16 +177,20 @@ export class BoardService implements IBoardService {
         return attackedSquares.includes(kingSquare);
     }
 
-    doesMovePutKingOnCheck(currentSquare: Square): boolean {
+    doesMovePutKingOnCheck(currentSquare: Square, targetSquare: Square): boolean {
         const piece: Piece | undefined = currentSquare.getPiece();
         let kingSquare: Square;
         
         if (piece) {
-            kingSquare = this.getKingSquare(piece.getColor());
-            currentSquare.removePiece();
-            const attackedSquares: Square[] = this.getAttackedSquaresBy(oppositeColor[piece.getColor()]);
-            currentSquare.setPiece(piece);
-            return this.isKingOnCheck(kingSquare, attackedSquares);
+            if (this.isSquareAvailable(piece, targetSquare)) {
+                kingSquare = this.getKingSquare(piece.getColor());
+                currentSquare.removePiece();
+                targetSquare.setPiece(piece);
+                const attackedSquares: Square[] = this.getAttackedSquaresBy(oppositeColor[piece.getColor()]);
+                targetSquare.removePiece();
+                currentSquare.setPiece(piece);
+                return this.isKingOnCheck(kingSquare, attackedSquares);
+            }
         }
 
         return false;
