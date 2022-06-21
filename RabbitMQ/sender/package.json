@@ -1,0 +1,16 @@
+{
+  "name": "rabbitmq",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/amqplib": "^0.8.2",
+    "amqplib": "^0.10.0"
+  }
+}
