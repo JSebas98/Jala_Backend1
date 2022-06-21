@@ -5,7 +5,7 @@ import { IGameService } from './IGameService';
 import { DITypes } from '../shared/inversify.types';
 import { Game } from '../entity/game';
 import { Player } from '../entity/player';
-import { File, Rank, GameStatus, Color, GamePieces } from '../shared/types';
+import { File, Rank } from '../shared/types';
 import { Board } from '../entity/board';
 import { Piece } from '../entity/piece';
 import { Message } from '../entity/message';
