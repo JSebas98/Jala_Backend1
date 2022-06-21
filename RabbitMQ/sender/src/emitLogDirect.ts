@@ -17,14 +17,18 @@ amqp.connect(
                 throw error1;
             }
 
-            const queue = 'hello';
-            const message = 'Hello world 2!';
+            const exchange = 'directLogs';
+            const args = process.argv.slice(2);
+            const msg = args.slice(1).join(' ') || 'Default';
+            const severity = (args.length > 0) ? args[0] : 'info';
 
-            channel.assertQueue(queue, {durable: false});
+            channel.assertExchange(exchange, 'direct', {
+                durable: false
+            });
 
-            channel.sendToQueue(queue, Buffer.from(message));
+            channel.publish(exchange, severity, Buffer.from(msg));
 
-            console.log('Message: ' + message);
+            console.log(` [x] Sent ${severity}: '${msg}'`);
         });
 
         setTimeout(function() {

@@ -13,7 +13,7 @@
             ],
             "runtimeArgs": ["ts-node"],
             "runtimeExecutable": "npx",
-            "program": "src/index.ts"
+            "program": "src/receiveLogDirect.ts"
         }
     ]
 }
