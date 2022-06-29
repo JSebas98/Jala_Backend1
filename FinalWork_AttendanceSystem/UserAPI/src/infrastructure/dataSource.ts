@@ -8,8 +8,7 @@ export const AppDataSource = new DataSource({
     username: 'root',
     password: 'Sebas.root.98',
     database: 'User',
-    entities: [User],
-    synchronize: true
+    entities: [User]
 });
 
 AppDataSource.initialize()

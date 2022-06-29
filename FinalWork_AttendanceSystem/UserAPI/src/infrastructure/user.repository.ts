@@ -13,6 +13,10 @@ export class UserRepository implements UserRepositoryInterface {
         this.userRepository = AppDataSource.getRepository(User);
     }
 
+    async getAllUsers(): Promise<User[]> {
+        return await this.userRepository.find();
+    }
+
     async createUser(user: User): Promise<User> {
         return await this.userRepository.save(user);
     }

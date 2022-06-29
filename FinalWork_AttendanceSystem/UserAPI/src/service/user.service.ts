@@ -9,6 +9,10 @@ export class UserService implements UserServiceInterface {
 
     constructor(@inject(DITypes.UserRepositoryInterface) private userRepository: UserRepositoryInterface){
     }
+
+    getAllUsers(): Promise<User[]> {
+        return this.userRepository.getAllUsers();
+    }
     
     createUser(user: User): Promise<User> {
         return this.userRepository.createUser(user);

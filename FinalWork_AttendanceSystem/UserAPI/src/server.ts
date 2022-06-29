@@ -5,7 +5,6 @@ import { container } from "./shared/inversify.config";
 import './controller/user.controller';
 
 export class Server {
-    // private app: express.Application;
     private port: number = 3000;
     private server: InversifyExpressServer;
 
@@ -16,13 +15,6 @@ export class Server {
             app.use(express.json());
         });
     }
-
-    // routes() {
-    //     this.app.use('/api/user/', this.userController.router);
-    //     this.app.get('/', (req: Request, res: Response) => {
-    //         res.send('Hello world!');
-    //     })
-    // }
 
     start() {
         const api = this.server.build();
