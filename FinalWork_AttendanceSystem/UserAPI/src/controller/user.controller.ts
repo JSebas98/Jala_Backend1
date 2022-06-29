@@ -3,6 +3,7 @@ import { UserServiceInterface } from '../service/user.service.interface';
 import DITypes from '../shared/inversify.types';
 import { inject } from "inversify";
 import { controller, httpPost, httpDelete, request, response, httpGet, queryParam } from "inversify-express-utils";
+import { ServerResponse } from "./server.response";
 
 @controller('/api/user')
 export class UserController {
@@ -13,7 +14,7 @@ export class UserController {
     @httpGet('/')
     async getAllUsers(@request() req: Request, @response() res: Response) {
         const users = await this.userService.getAllUsers();
-        res.send(users);
+        ServerResponse.success(res, users, 'Users retreived successfully!');
     }
 
     @httpGet('/:name')
@@ -30,12 +31,12 @@ export class UserController {
     async createUser(@request() req: Request, @response() res: Response) {
         const user = req.body;
         const response = await this.userService.createUser(user);
-        res.send(response);
+        ServerResponse.created(res, response, 'User successfully created!');
     }
 
     @httpDelete('/')
     deleteUser(@queryParam('id') id: string, @response() res: Response): void {
         this.userService.deleteUser(id);
-        res.sendStatus(204);
+        ServerResponse.success(res, null, `User with id ${id} successfully deleted!`);
     };
 }
