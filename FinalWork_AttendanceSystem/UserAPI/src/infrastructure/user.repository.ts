@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { AppDataSource } from "./dataSource";
 import { User } from '../entity/user.entity';
-import { DeleteResult, Repository } from "typeorm";
+import { DeleteResult, Like, Repository } from "typeorm";
 import { UserRepositoryInterface } from './user.repository.interface';
 
 @injectable()
@@ -15,6 +15,15 @@ export class UserRepository implements UserRepositoryInterface {
 
     async getAllUsers(): Promise<User[]> {
         return await this.userRepository.find();
+    }
+
+    async getUsersByNameOrNickname(name: string, nickname: string) {
+        return await this.userRepository.find({
+            where: [
+                {name: name},
+                {nickname: nickname}
+            ]
+        })
     }
 
     async createUser(user: User): Promise<User> {

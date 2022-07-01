@@ -17,14 +17,13 @@ export class UserController {
         ServerResponse.success(res, users, 'Users retreived successfully!');
     }
 
-    @httpGet('/:name')
-    async getUserByName(@queryParam('name') name: string, @response() res: Response) {
+    @httpGet('/filter')
+    async getUserByNameOrNickname(@queryParam('name') name: string,
+                                @queryParam('nickname') nickname: string,
+                                @response() res: Response) {
 
-    }
-
-    @httpGet('/:nickname')
-    async getUserByNickname(@queryParam('nickname') name: string, @response() res: Response) {
-        
+        const users = await this.userService.getUsersByNameOrNickname(name, nickname);
+        ServerResponse.success(res, users, 'User(s) found.');
     }
 
     @httpPost('/')

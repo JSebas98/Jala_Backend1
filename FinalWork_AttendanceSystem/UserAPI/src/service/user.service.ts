@@ -12,8 +12,17 @@ export class UserService implements UserServiceInterface {
     constructor(@inject(DITypes.UserRepositoryInterface) private userRepository: UserRepositoryInterface){
     }
 
-    getAllUsers(): Promise<User[]> {
-        return this.userRepository.getAllUsers();
+    async getAllUsers(): Promise<User[]> {
+        return await this.userRepository.getAllUsers();
+    }
+
+    async getUsersByNameOrNickname(name: string, nickname: string) {
+        const users: User[] | null = await this.userRepository.getUsersByNameOrNickname(name, nickname);
+        if(users.length === 0) {
+            throw new NotFound(`User not found in database.`);
+        }
+
+        return users;
     }
     
     async createUser(user: User): Promise<User> {
