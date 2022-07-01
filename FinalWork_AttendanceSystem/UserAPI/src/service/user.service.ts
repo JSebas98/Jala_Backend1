@@ -3,6 +3,8 @@ import { User } from '../entity/user.entity';
 import { UserServiceInterface } from './user.service.interface';
 import { UserRepositoryInterface } from '../infrastructure/user.repository.interface';
 import DITypes from '../shared/inversify.types';
+import { BadRequest } from '../shared/exceptions/badRequest';
+import { NotFound } from '../shared/exceptions/notFound';
 
 @injectable()
 export class UserService implements UserServiceInterface {
@@ -14,11 +16,40 @@ export class UserService implements UserServiceInterface {
         return this.userRepository.getAllUsers();
     }
     
-    createUser(user: User): Promise<User> {
-        return this.userRepository.createUser(user);
+    async createUser(user: User): Promise<User> {
+        const resultValidation: string[] = this.validateFieldsUser(user);
+        
+        if (resultValidation.length > 0) {
+            let errorDescription: string = '';
+            resultValidation.forEach((message) => {
+                errorDescription += `${message} `;
+            });
+            throw new BadRequest(errorDescription);
+        }
+
+        return await this.userRepository.createUser(user);
     }
-    deleteUser(id: string): void {
-        this.userRepository.deleteUser(id);
+
+    async deleteUser(id: string): Promise<boolean> {
+        const result: boolean = await this.userRepository.deleteUser(id);
+        return result;
+        // if (!result) {
+        //     throw new NotFound(`User with id ${id} not found.`);  
+        // }
+    }
+
+    validateFieldsUser(user: User): string[] {
+        const errorDetails: string[] = [];
+
+        if (!user.name) {
+            errorDetails.push('Name is a required field.');
+        }
+
+        if (!user.nickname) {
+            errorDetails.push('Nickname is a required field.');
+        }
+
+        return errorDetails;
     }
 
 }

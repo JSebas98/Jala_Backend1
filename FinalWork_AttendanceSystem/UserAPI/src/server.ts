@@ -3,6 +3,7 @@ import express, { Application } from "express";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { container } from "./shared/inversify.config";
 import './controller/user.controller';
+import handleError from './shared/exceptions/errorHandler.middleware';
 
 export class Server {
     private port: number = 3000;
@@ -18,6 +19,8 @@ export class Server {
 
     start() {
         const api = this.server.build();
+        
+        api.use(handleError);
         api.listen(this.port, ()=> {
             console.log(`Server is listening on ${this.port} port.`);
         });
