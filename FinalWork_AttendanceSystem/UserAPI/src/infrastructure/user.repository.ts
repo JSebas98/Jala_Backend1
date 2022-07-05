@@ -20,8 +20,8 @@ export class UserRepository implements UserRepositoryInterface {
     async getUsersByNameOrNickname(name: string, nickname: string) {
         return await this.userRepository.find({
             where: [
-                {name: name},
-                {nickname: nickname}
+                {name: Like(`%${name}%`)},
+                {nickname: Like(`%${nickname}%`)}
             ]
         })
     }

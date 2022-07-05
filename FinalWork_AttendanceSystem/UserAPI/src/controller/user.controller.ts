@@ -37,7 +37,7 @@ export class UserController {
     async deleteUser(@queryParam('id') id: string, @response() res: Response): Promise<void> {
         const result: boolean = await this.userService.deleteUser(id);
         if (!result) {
-            res.status(404).json({message: `User with id ${id} not found.`})
+            res.status(404).json({data: null, message: `User with id ${id} not found.`})
         } else {
             ServerResponse.success(res, null, `User with id ${id} successfully deleted!`);
         }
