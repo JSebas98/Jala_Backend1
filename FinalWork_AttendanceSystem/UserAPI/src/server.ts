@@ -1,12 +1,12 @@
 import 'reflect-metadata';
-import express, { Application } from "express";
-import { InversifyExpressServer } from "inversify-express-utils";
-import { container } from "./shared/inversify.config";
+import express, { Application } from 'express';
+import { InversifyExpressServer } from 'inversify-express-utils';
+import { container } from './shared/inversify.config';
 import './controller/user.controller';
 import handleError from './shared/exceptions/errorHandler.middleware';
 
 export class Server {
-    private port: number = 3000;
+    private port = 3000;
     private server: InversifyExpressServer;
 
     constructor() {

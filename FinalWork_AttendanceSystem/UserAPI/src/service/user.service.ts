@@ -19,7 +19,7 @@ export class UserService implements UserServiceInterface {
     async getUsersByNameOrNickname(name: string, nickname: string) {
         const users: User[] | null = await this.userRepository.getUsersByNameOrNickname(name, nickname);
         if(users.length === 0) {
-            throw new NotFound(`User not found in database.`);
+            throw new NotFound('User not found in database.');
         }
 
         return users;
@@ -29,7 +29,7 @@ export class UserService implements UserServiceInterface {
         const resultValidation: string[] = this.validateFieldsUser(user);
         
         if (resultValidation.length > 0) {
-            let errorDescription: string = '';
+            let errorDescription = '';
             resultValidation.forEach((message) => {
                 errorDescription += `${message} `;
             });

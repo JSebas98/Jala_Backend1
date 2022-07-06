@@ -1,7 +1,7 @@
-import { injectable } from "inversify";
-import { AppDataSource } from "./dataSource";
+import { injectable } from 'inversify';
+import { AppDataSource } from './dataSource';
 import { User } from '../entity/user.entity';
-import { DeleteResult, Like, Repository } from "typeorm";
+import { DeleteResult, Like, Repository } from 'typeorm';
 import { UserRepositoryInterface } from './user.repository.interface';
 
 @injectable()
@@ -23,7 +23,7 @@ export class UserRepository implements UserRepositoryInterface {
                 {name: Like(`%${name}%`)},
                 {nickname: Like(`%${nickname}%`)}
             ]
-        })
+        });
     }
 
     async createUser(user: User): Promise<User> {
@@ -32,7 +32,7 @@ export class UserRepository implements UserRepositoryInterface {
 
     async deleteUser(id: string): Promise<boolean> {
         const result: DeleteResult = await this.userRepository.delete(id);
-        let wasDeleted: boolean = false;
+        let wasDeleted = false;
         if (result.affected) {
             wasDeleted = result.affected > 0;
         }

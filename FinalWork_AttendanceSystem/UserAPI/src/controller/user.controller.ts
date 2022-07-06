@@ -1,9 +1,9 @@
-import { Request, Response, Router } from "express";
+import { Request, Response } from 'express';
 import { UserServiceInterface } from '../service/user.service.interface';
 import DITypes from '../shared/inversify.types';
-import { inject } from "inversify";
-import { controller, httpPost, httpDelete, request, response, httpGet, queryParam } from "inversify-express-utils";
-import { ServerResponse } from "./server.response";
+import { inject } from 'inversify';
+import { controller, httpPost, httpDelete, request, response, httpGet, queryParam } from 'inversify-express-utils';
+import { ServerResponse } from './server.response';
 
 @controller('/api/user')
 export class UserController {
@@ -37,10 +37,9 @@ export class UserController {
     async deleteUser(@queryParam('id') id: string, @response() res: Response): Promise<void> {
         const result: boolean = await this.userService.deleteUser(id);
         if (!result) {
-            res.status(404).json({data: null, message: `User with id ${id} not found.`})
+            res.status(404).json({data: null, message: `User with id ${id} not found.`});
         } else {
             ServerResponse.success(res, null, `User with id ${id} successfully deleted!`);
         }
-
-    };
+    }
 }

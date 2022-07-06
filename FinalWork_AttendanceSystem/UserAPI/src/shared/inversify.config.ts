@@ -1,4 +1,4 @@
-import { Container } from "inversify";
+import { Container } from 'inversify';
 import { UserRepositoryInterface } from '../infrastructure/user.repository.interface';
 import DITypes from './inversify.types';
 import { UserRepository } from '../infrastructure/user.repository';
