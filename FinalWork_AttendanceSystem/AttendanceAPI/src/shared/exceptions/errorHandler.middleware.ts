@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { ValidationError } from "express-json-validator-middleware";
 import { BaseError } from "./baseError";
 
 function handleError(

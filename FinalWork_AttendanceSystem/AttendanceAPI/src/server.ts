@@ -3,10 +3,13 @@ import express, { Application } from "express";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { container } from "./shared/inversify.config";
 import './controller/attendance.controller';
+import { DbConnection } from './infrastructure/db-connection';
+import handleError from './shared/exceptions/errorHandler.middleware';
 
 export class Server {
-    private port: number = 3000;
+    private port: number = 3001;
     private server: InversifyExpressServer;
+    private dbConnection: DbConnection;
 
     constructor() {
         this.server = new InversifyExpressServer(container);
@@ -14,11 +17,15 @@ export class Server {
             app.use(express.urlencoded({extended: true}));
             app.use(express.json());
         });
+        this.dbConnection = new DbConnection();
     }
 
-    start() {
-        const api = this.server.build();
+    async start() {
+        await this.dbConnection.connect();
 
+        const api = this.server.build();
+        api.use(handleError);        
+        
         api.listen(this.port, () => {
             console.log(`Server is listening on port ${this.port}.`);
         });
