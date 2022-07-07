@@ -4,14 +4,16 @@ import AttendanceRepositoryInterface from '../infrastructure/attendance.reposito
 import DITypes from '../shared/inversify.types';
 import { Attendance } from '../entity/attendance';
 import AttendanceInterface from '../entity/attendance.interface';
-import AttendanceId from '../shared/types';
+import { AttendanceId } from '../shared/types';
 import { NotFound } from '../shared/exceptions/notFound';
 import { BadRequest } from '../shared/exceptions/badRequest';
+import { UserServiceInterface } from './user.service.interface';
 
 @injectable()
 export class AttendanceService implements AttendanceServiceInterface {
 
-    constructor(@inject(DITypes.AttendanceRepositoryInterface) private attendanceRepository: AttendanceRepositoryInterface) {}
+    constructor(@inject(DITypes.AttendanceRepositoryInterface) private attendanceRepository: AttendanceRepositoryInterface,
+                @inject(DITypes.UserServiceInterface) private userService: UserServiceInterface) {}
     
     async getAllAttendances(): Promise<AttendanceInterface[]> {
         const attendances = await this.attendanceRepository.getAllAttendances();
@@ -23,8 +25,13 @@ export class AttendanceService implements AttendanceServiceInterface {
     }
 
     async createNewAttendance(attendance: Attendance): Promise<AttendanceInterface> {
+
+        const userExists = await this.validateUserExistence(attendance.userId);
+        if(!userExists) {
+            throw new NotFound(`User with id ${attendance.userId} doesn't exists.`);
+        }
         
-        const resultValidation: string[] = this.validateFieldsAttendance(attendance);
+        const resultValidation: string[] = await this.validateFieldsAttendance(attendance);
 
         if (resultValidation.length > 0) {
             let errorDescription = '';
@@ -80,5 +87,14 @@ export class AttendanceService implements AttendanceServiceInterface {
         }
 
         return errorDetails;
+    }
+
+    async validateUserExistence(userId: string): Promise<boolean> {
+        const user = await this.userService.getSingleUser(userId);
+        if (!user) {
+            return false;
+        }
+
+        return true;
     }
 }

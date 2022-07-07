@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { Attendance } from "../entity/attendance";
 import AttendanceInterface from "../entity/attendance.interface";
-import AttendanceId from "../shared/types";
+import { AttendanceId } from "../shared/types";
 import AttendanceRepositoryInterface from "./attendance.repository.interface";
 import AttendanceModel from '../entity/attendance.entity';
 import { DeleteResult } from "mongodb";

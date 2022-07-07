@@ -3,7 +3,7 @@ import { inject } from "inversify";
 import { controller, httpDelete, httpGet, httpPost, queryParam, request, response } from "inversify-express-utils";
 import AttendanceServiceInterface from '../service/attendance.service.interface';
 import DITypes from "../shared/inversify.types";
-import AttendanceId from "../shared/types";
+import { AttendanceId } from "../shared/types";
 import { ServerResponse } from "./server.response";
 
 @controller('/api/attendance')
@@ -32,13 +32,13 @@ export class AttendanceController {
 
     @httpDelete('/')
     async deleteSingleAttendance(@queryParam('id') id: AttendanceId, @response() res: Response) {
-        this.attendanceService.deleteSingleAttendance(id);
+        await this.attendanceService.deleteSingleAttendance(id);
         ServerResponse.success(res, null, `Attendance with id ${id} successfully deleted!`);
     }
 
     @httpDelete('/all')
     async deleteAttendancesByUser(@queryParam('userId') userId: string, @response() res: Response) {
-        this.attendanceService.deleteAttendancesByUser(userId);
+        await this.attendanceService.deleteAttendancesByUser(userId);
         ServerResponse.success(res, null, `User ${userId} attendances successfully deleted!`);
     }
 }
