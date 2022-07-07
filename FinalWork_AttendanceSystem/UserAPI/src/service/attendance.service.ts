@@ -11,13 +11,18 @@ export class AttendanceService implements AttendanceServiceInterface{
     constructor() {}
 
     async getAllAttendancesByUser(userId: string): Promise<Attendance[]> {
-        const response = await fetch(this.ATTENDANCE_API_URL+`/filter?userId=${userId}`);
+        const response = await fetch(`${this.ATTENDANCE_API_URL}/filter?userId=${userId}`);
         const data = await response.json();
 
         return data.data;
     }
 
     async deleteAllAttendancesByUser(userId: string): Promise<void> {
-
+        const response = await fetch(`${this.ATTENDANCE_API_URL}/all?userId=${userId}`, {
+            method: 'DELETE'
+        });
+        if (response.status !== 200) {
+            throw new Error(`Error while deleting user ${userId}' attendances.`);
+        }
     }
 }

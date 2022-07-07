@@ -55,6 +55,7 @@ export class UserService implements UserServiceInterface {
     }
 
     async deleteUser(id: string): Promise<boolean> {
+        await this.attendanceService.deleteAllAttendancesByUser(id);
         const result = await this.userRepository.deleteUser(id);
         if (!result) {
             throw new NotFound(`User with id ${id} not found.`);  
