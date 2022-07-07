@@ -5,11 +5,14 @@ import { UserRepositoryInterface } from '../infrastructure/user.repository.inter
 import DITypes from '../shared/inversify.types';
 import { BadRequest } from '../shared/exceptions/badRequest';
 import { NotFound } from '../shared/exceptions/notFound';
+import { AttendanceServiceInterface } from './attendance.service.interface';
+import { UserDomain } from '../entity/user';
 
 @injectable()
 export class UserService implements UserServiceInterface {
 
-    constructor(@inject(DITypes.UserRepositoryInterface) private userRepository: UserRepositoryInterface){
+    constructor(@inject(DITypes.UserRepositoryInterface) private userRepository: UserRepositoryInterface,
+                @inject(DITypes.AttendanceServiceInterface) private attendanceService: AttendanceServiceInterface){
     }
 
     async getAllUsers(): Promise<User[]> {
@@ -24,9 +27,21 @@ export class UserService implements UserServiceInterface {
 
         return users;
     }
+
+    async getUserDetailed(userId: string): Promise<UserDomain | null> {
+        const user = await this.userRepository.getSingleUser(userId);
+
+        if(!user) {
+            throw new NotFound(`User with id ${userId} not found in database.`);
+        }
+        const attendances = await this.attendanceService.getAllAttendancesByUser(userId);
+        user.attendances = attendances;
+
+        return user;
+    }
     
     async createUser(user: User): Promise<User> {
-        const resultValidation: string[] = this.validateFieldsUser(user);
+        const resultValidation: string[] = await this.validateFieldsUser(user);
         
         if (resultValidation.length > 0) {
             let errorDescription = '';
@@ -40,11 +55,12 @@ export class UserService implements UserServiceInterface {
     }
 
     async deleteUser(id: string): Promise<boolean> {
-        const result: boolean = await this.userRepository.deleteUser(id);
+        const result = await this.userRepository.deleteUser(id);
+        if (!result) {
+            throw new NotFound(`User with id ${id} not found.`);  
+        }
+
         return result;
-        // if (!result) {
-        //     throw new NotFound(`User with id ${id} not found.`);  
-        // }
     }
 
     validateFieldsUser(user: User): string[] {

@@ -26,6 +26,12 @@ export class UserController {
         ServerResponse.success(res, users, 'User(s) found.');
     }
 
+    @httpGet('/details')
+    async getUserDetailed(@queryParam('userId') userId: string, @response() res: Response) {
+        const user = await this.userService.getUserDetailed(userId);
+        ServerResponse.success(res, user, `User with id ${userId} found.`);
+    }
+
     @httpPost('/')
     async createUser(@request() req: Request, @response() res: Response) {
         const user = req.body;
@@ -35,11 +41,8 @@ export class UserController {
 
     @httpDelete('/')
     async deleteUser(@queryParam('id') id: string, @response() res: Response): Promise<void> {
-        const result: boolean = await this.userService.deleteUser(id);
-        if (!result) {
-            res.status(404).json({data: null, message: `User with id ${id} not found.`});
-        } else {
-            ServerResponse.success(res, null, `User with id ${id} successfully deleted!`);
-        }
+        await this.userService.deleteUser(id);
+
+        ServerResponse.success(res, null, `User with id ${id} successfully deleted!`);
     }
 }

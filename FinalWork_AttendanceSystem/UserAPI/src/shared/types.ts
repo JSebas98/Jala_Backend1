@@ -1,8 +1,9 @@
-type UserProps = {
-    id: string,
-    name: string,
-    nickname: string,
-    totalAttendance: number
+type Attendance = {
+    userId?: string,
+    startTime?: string,
+    endTime?: string,
+    date?: Date,
+    notes?: string 
 }
 
-export { UserProps };
+export { Attendance };
