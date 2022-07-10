@@ -33,7 +33,7 @@ export class UserDomain {
         this._attendances = attendances;
     }
 
-    set totalAttendance(newAttendances: number) {
-        this._totalAttendance += newAttendances;
+    set totalAttendance(totalAttendances: number) {
+        this._totalAttendance = totalAttendances;
     }
 }

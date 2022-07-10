@@ -5,6 +5,6 @@ export interface UserServiceInterface {
     getUsersByNameOrNickname(name: string, nickname: string): Promise<User[]>;
     getUserDetailed(userId: string): void;
     createUser(user: User): Promise<User>;
-    updateUser(user: User): Promise<User | null>;
+    updateUser(user: User): Promise<User>;
     deleteUser(id: string): Promise<boolean>;
 }

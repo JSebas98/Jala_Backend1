@@ -37,18 +37,8 @@ export class UserRepository implements UserRepositoryInterface {
         });
     }
 
-    async createUser(user: User): Promise<User> {
+    async saveUser(user: User): Promise<User> {
         return await this.userRepository.save(user);
-    }
-
-    async updateUser(user: User): Promise<User | null> {
-        const userToUpdate = await this.userRepository.findOneBy({ id: user.id });
-        if (userToUpdate) {
-            userToUpdate.totalAttendance = user.totalAttendance;
-            return await this.userRepository.save(userToUpdate);
-        }
-
-        return userToUpdate;
     }
 
     async deleteUser(id: string): Promise<boolean> {

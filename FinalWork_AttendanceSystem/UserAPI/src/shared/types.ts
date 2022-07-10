@@ -1,4 +1,4 @@
-type Attendance = {
+interface Attendance {
     userId?: string,
     startTime?: string,
     endTime?: string,
@@ -6,4 +6,10 @@ type Attendance = {
     notes?: string 
 }
 
-export { Attendance };
+interface UserUpdate {
+    id: string,
+    totalAttendance: number
+}
+
+
+export { Attendance, UserUpdate };

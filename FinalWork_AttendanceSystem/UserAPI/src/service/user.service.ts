@@ -7,6 +7,8 @@ import { BadRequest } from '../shared/exceptions/badRequest';
 import { NotFound } from '../shared/exceptions/notFound';
 import { AttendanceServiceInterface } from './attendance.service.interface';
 import { UserDomain } from '../entity/user';
+import { UserUpdate } from '../shared/types';
+import { UserMapper } from '../entity/userMapper';
 
 @injectable()
 export class UserService implements UserServiceInterface {
@@ -51,16 +53,29 @@ export class UserService implements UserServiceInterface {
             throw new BadRequest(errorDescription);
         }
 
-        return await this.userRepository.createUser(user);
+        return await this.userRepository.saveUser(user);
     }
 
-    async updateUser(user: User): Promise<User> {
-        const updatedUser = await this.userRepository.updateUser(user);
-        if(!updatedUser) {
-            throw new NotFound(`User with id ${user.id} not found. Can't update.`);
+    async updateUser(user: UserUpdate): Promise<User> {
+        const resultValidation: string[] = await this.validateFieldsUpdate(user);
+        if (resultValidation.length > 0) {
+            let errorDescription = '';
+            resultValidation.forEach((message) => {
+                errorDescription += `${message} `;
+            });
+            throw new BadRequest(errorDescription);
         }
 
-        return updatedUser;
+        const userToUpdate = await this.userRepository.getSingleUser(user.id);
+        if(!userToUpdate) {
+            throw new NotFound(`User with ${user.id} not found. Can't update!`);
+        }
+
+        if(user.totalAttendance) {
+            userToUpdate.totalAttendance = user.totalAttendance;
+        }
+
+        return await this.userRepository.saveUser(UserMapper.toEntity(userToUpdate));
     }
 
     async deleteUser(id: string): Promise<boolean> {
@@ -83,6 +98,20 @@ export class UserService implements UserServiceInterface {
 
         if (!user.nickname) {
             errorDetails.push('Nickname is a required field.');
+        }
+
+        return errorDetails;
+    }
+
+    validateFieldsUpdate(user: UserUpdate): string[] {
+        const errorDetails: string[] = [];
+
+        if (!user.id) {
+            errorDetails.push('Id is a required field.');
+        }
+
+        if (!user.totalAttendance) {
+            errorDetails.push('totalAttendance is a required field.');
         }
 
         return errorDetails;
