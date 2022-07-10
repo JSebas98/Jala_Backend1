@@ -63,12 +63,7 @@ export class AttendanceService implements AttendanceServiceInterface {
     }
 
     async deleteAttendancesByUser(userId: string): Promise<boolean> {
-        const result = await this.attendanceRepository.deleteAttendancesByUser(userId);
-        if(!result) {
-            throw new NotFound(`No attendances for user ${userId} have been found. Cannot delete.`);
-        }
-
-        return result;
+        return await this.attendanceRepository.deleteAttendancesByUser(userId);
     }
 
     validateFieldsAttendance(attendance: Attendance): string[] {

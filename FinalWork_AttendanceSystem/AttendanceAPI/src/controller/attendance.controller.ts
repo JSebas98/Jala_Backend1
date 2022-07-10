@@ -38,7 +38,11 @@ export class AttendanceController {
 
     @httpDelete('/all')
     async deleteAttendancesByUser(@queryParam('userId') userId: string, @response() res: Response) {
-        await this.attendanceService.deleteAttendancesByUser(userId);
-        ServerResponse.success(res, null, `User ${userId} attendances successfully deleted!`);
+        const result = await this.attendanceService.deleteAttendancesByUser(userId);
+        if (!result) {
+            ServerResponse.success(res, null, `User ${userId} has no attendances.`);
+        } else {
+            ServerResponse.success(res, null, `User ${userId} attendances successfully deleted!`);
+        }
     }
 }

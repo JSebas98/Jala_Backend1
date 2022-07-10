@@ -1,4 +1,6 @@
 import 'reflect-metadata';
+import * as dotenv from 'dotenv';
+dotenv.config();
 import express, { Application } from 'express';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { container } from './shared/inversify.config';
@@ -6,7 +8,7 @@ import './controller/user.controller';
 import handleError from './shared/exceptions/errorHandler.middleware';
 
 export class Server {
-    private port = 3000;
+    private port = process.env.API_PORT;
     private server: InversifyExpressServer;
 
     constructor() {
