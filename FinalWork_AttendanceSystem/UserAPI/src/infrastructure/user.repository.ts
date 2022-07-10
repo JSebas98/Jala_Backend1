@@ -41,6 +41,16 @@ export class UserRepository implements UserRepositoryInterface {
         return await this.userRepository.save(user);
     }
 
+    async updateUser(user: User): Promise<User | null> {
+        const userToUpdate = await this.userRepository.findOneBy({ id: user.id });
+        if (userToUpdate) {
+            userToUpdate.totalAttendance = user.totalAttendance;
+            return await this.userRepository.save(userToUpdate);
+        }
+
+        return userToUpdate;
+    }
+
     async deleteUser(id: string): Promise<boolean> {
         const result: DeleteResult = await this.userRepository.delete(id);
         let wasDeleted = false;

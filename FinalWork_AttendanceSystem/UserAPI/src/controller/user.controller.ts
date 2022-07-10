@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { UserServiceInterface } from '../service/user.service.interface';
 import DITypes from '../shared/inversify.types';
 import { inject } from 'inversify';
-import { controller, httpPost, httpDelete, request, response, httpGet, queryParam } from 'inversify-express-utils';
+import { controller, httpPost, httpDelete, request, response, httpGet, queryParam, httpPut } from 'inversify-express-utils';
 import { ServerResponse } from './server.response';
 
 @controller('/api/user')
@@ -39,10 +39,16 @@ export class UserController {
         ServerResponse.created(res, response, 'User successfully created!');
     }
 
-    @httpDelete('/')
-    async deleteUser(@queryParam('id') id: string, @response() res: Response): Promise<void> {
-        await this.userService.deleteUser(id);
+    @httpPut('/')
+    async updateUser(@request() req: Request, @response() res: Response) {
+        const user = req.body;
+        const response = await this.userService.updateUser(user);
+        ServerResponse.created(res, response, 'User successfully updated!');
+    }
 
+    @httpDelete('/')
+    async deleteUser(@queryParam('id') id: string, @response() res: Response) {
+        await this.userService.deleteUser(id);
         ServerResponse.success(res, null, `User with id ${id} successfully deleted!`);
     }
 }

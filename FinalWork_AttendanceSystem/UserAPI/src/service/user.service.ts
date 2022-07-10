@@ -19,7 +19,7 @@ export class UserService implements UserServiceInterface {
         return await this.userRepository.getAllUsers();
     }
 
-    async getUsersByNameOrNickname(name: string, nickname: string) {
+    async getUsersByNameOrNickname(name: string, nickname: string): Promise<User[]> {
         const users: User[] | null = await this.userRepository.getUsersByNameOrNickname(name, nickname);
         if(users.length === 0) {
             throw new NotFound('User not found in database.');
@@ -52,6 +52,15 @@ export class UserService implements UserServiceInterface {
         }
 
         return await this.userRepository.createUser(user);
+    }
+
+    async updateUser(user: User): Promise<User> {
+        const updatedUser = await this.userRepository.updateUser(user);
+        if(!updatedUser) {
+            throw new NotFound(`User with id ${user.id} not found. Can't update.`);
+        }
+
+        return updatedUser;
     }
 
     async deleteUser(id: string): Promise<boolean> {
