@@ -1,25 +1,24 @@
 import { inject, injectable } from 'inversify';
-import AttendanceServiceInterface from './attendance.service.interface';
+import AttendanceServiceInterface from './serviceInterfaces/attendance.service.interface';
 import AttendanceRepositoryInterface from '../infrastructure/attendance.repository.interface';
 import DITypes from '../shared/inversify.types';
 import { Attendance } from '../entity/attendance';
 import AttendanceInterface from '../entity/attendance.interface';
-import { AttendanceId } from '../shared/types';
+import { AttendanceId, MessageToQueue } from '../shared/types';
 import { NotFound } from '../shared/exceptions/notFound';
 import { BadRequest } from '../shared/exceptions/badRequest';
-import { UserServiceInterface } from './user.service.interface';
+import { UserServiceInterface } from './serviceInterfaces/user.service.interface';
+import { StatsService } from './stats.service';
 
 @injectable()
 export class AttendanceService implements AttendanceServiceInterface {
 
     constructor(@inject(DITypes.AttendanceRepositoryInterface) private attendanceRepository: AttendanceRepositoryInterface,
-                @inject(DITypes.UserServiceInterface) private userService: UserServiceInterface) {}
-    
+                @inject(DITypes.UserServiceInterface) private userService: UserServiceInterface,
+                @inject(DITypes.StatsService) private statsService: StatsService) {}
+
     async getAllAttendances(): Promise<AttendanceInterface[]> {
         const attendances = await this.attendanceRepository.getAllAttendances();
-        if(attendances.length === 0) {
-            throw new NotFound('No attendances found in the database.');
-        }
 
         return attendances;
     }
@@ -41,7 +40,11 @@ export class AttendanceService implements AttendanceServiceInterface {
             throw new BadRequest(errorDescription);
         }
 
-        return await this.attendanceRepository.createNewAttendance(attendance);
+        const createdAttendance = await this.attendanceRepository.createNewAttendance(attendance);
+        const message: MessageToQueue = { event: 'AttendanceCreated', userId: attendance.userId };
+        this.statsService.sendMessage(message);
+
+        return createdAttendance;
     }
 
     async getAttendancesByUser(userId: string): Promise<AttendanceInterface[]> {
@@ -54,16 +57,25 @@ export class AttendanceService implements AttendanceServiceInterface {
     }
     
     async deleteSingleAttendance(id: AttendanceId): Promise<boolean> {
+        const attendance = await this.attendanceRepository.getSingleAttendance(id);
         const result = await this.attendanceRepository.deleteSingleAttendance(id);
         if(!result) {
             throw new NotFound(`Attendance with id ${id} not found. Cannot delete.`);
         }
 
+        const message: MessageToQueue = { event: 'AttendanceDeleted', userId: attendance.userId };
+        this.statsService.sendMessage(message);
+
         return result;
     }
 
     async deleteAttendancesByUser(userId: string): Promise<boolean> {
-        return await this.attendanceRepository.deleteAttendancesByUser(userId);
+        const result = await this.attendanceRepository.deleteAttendancesByUser(userId)
+        if(!result) {
+            throw new NotFound(`No attendances for user ${userId} have been found.`);
+        }
+
+        return result;
     }
 
     validateFieldsAttendance(attendance: Attendance): string[] {

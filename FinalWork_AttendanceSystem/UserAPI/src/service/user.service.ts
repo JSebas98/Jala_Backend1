@@ -23,9 +23,6 @@ export class UserService implements UserServiceInterface {
 
     async getUsersByNameOrNickname(name: string, nickname: string): Promise<User[]> {
         const users: User[] | null = await this.userRepository.getUsersByNameOrNickname(name, nickname);
-        if(users.length === 0) {
-            throw new NotFound('User not found in database.');
-        }
 
         return users;
     }

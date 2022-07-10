@@ -7,6 +7,7 @@ import { container } from "./shared/inversify.config";
 import './controller/attendance.controller';
 import { DbConnection } from './infrastructure/db-connection';
 import handleError from './shared/exceptions/errorHandler.middleware';
+import { StatsService } from './service/stats.service';
 
 export class Server {
     private port = process.env.API_PORT;

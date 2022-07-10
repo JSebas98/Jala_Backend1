@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import fetch from 'node-fetch';
 import { UserDomain } from '../shared/types';
-import { UserServiceInterface } from './user.service.interface';
+import { UserServiceInterface } from './serviceInterfaces/user.service.interface';
 
 @injectable()
 export class UserService implements UserServiceInterface {

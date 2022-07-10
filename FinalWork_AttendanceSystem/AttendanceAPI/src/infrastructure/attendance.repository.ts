@@ -9,6 +9,10 @@ import { DeleteResult } from "mongodb";
 @injectable()
 export class AttendanceRepository implements AttendanceRepositoryInterface {
     
+    async getSingleAttendance(id: AttendanceId) {
+        return await AttendanceModel.findById(id);
+    }
+    
     async getAllAttendances(): Promise<AttendanceInterface[]> {
         return await AttendanceModel.find();
     }

@@ -11,4 +11,9 @@ type UserDomain = {
     _attendances?: AttendanceInterface[]
 };
 
-export { AttendanceId, UserDomain };
+interface MessageToQueue {
+    event: string,
+    userId: string
+}
+
+export { AttendanceId, UserDomain, MessageToQueue };

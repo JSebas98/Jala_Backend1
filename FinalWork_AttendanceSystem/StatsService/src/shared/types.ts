@@ -8,4 +8,14 @@ interface Attendance {
 
 type ResponseAttendance = { data: Attendance[] };
 
-export { Attendance, ResponseAttendance };
+interface MessageReceived {
+    event: string,
+    userId: string
+}
+
+interface UserUpdate {
+    id: string,
+    totalAttendance: number
+}
+
+export { Attendance, ResponseAttendance, MessageReceived, UserUpdate };
