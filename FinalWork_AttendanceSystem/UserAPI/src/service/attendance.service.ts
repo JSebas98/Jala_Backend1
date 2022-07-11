@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import { Attendance } from '../shared/types';
 
 @injectable()
-export class AttendanceService implements AttendanceServiceInterface{
+export class AttendanceService implements AttendanceServiceInterface {
 
     constructor() {}
 
@@ -16,12 +16,15 @@ export class AttendanceService implements AttendanceServiceInterface{
     }
 
     async deleteAllAttendancesByUser(userId: string): Promise<void> {
-        const response = await fetch(`${process.env.ATTENDANCE_API_URL}/all?userId=${userId}`, {
-            method: 'DELETE'
-        });
-        
-        if (response.status !== 200) {
-            throw new Error(`Error while deleting user ${userId}' attendances.`);
+        const userAttendances = await this.getAllAttendancesByUser(userId);
+        if(userAttendances) {
+            const response = await fetch(`${process.env.ATTENDANCE_API_URL}/all?userId=${userId}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.status !== 200) {
+                throw new Error(`Error while deleting user ${userId}' attendances.`);
+            }
         }
     }
 }

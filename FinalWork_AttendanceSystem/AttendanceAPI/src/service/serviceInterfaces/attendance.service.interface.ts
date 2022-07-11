@@ -1,6 +1,6 @@
-import { Attendance } from "../../entity/attendance";
-import AttendanceInterface from "../../entity/attendance.interface";
-import { AttendanceId } from "../../shared/types";
+import { Attendance } from '../../entity/attendance';
+import AttendanceInterface from '../../entity/attendance.interface';
+import { AttendanceId } from '../../shared/types';
 
 interface AttendanceServiceInterface {
     getAllAttendances(): Promise<AttendanceInterface[]>;

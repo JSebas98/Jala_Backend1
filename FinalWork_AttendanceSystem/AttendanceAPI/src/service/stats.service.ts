@@ -8,9 +8,9 @@ const connectionParams = {
     port: parseInt(process.env.RABBIT_PORT as string),
     username: process.env.RABBIT_USERNAME,
     password: process.env.RABBIT_PASSWORD
-}
+};
 
-const queue: string = 'stats';
+const queue = 'stats';
 
 @injectable()
 export class StatsService {
@@ -20,7 +20,7 @@ export class StatsService {
 
     constructor() { 
         this.connect();
-        console.log('Connecting from constructor.');
+        console.log('RabbitMQ sender connected.');
     }
 
     connect() {
@@ -35,7 +35,7 @@ export class StatsService {
                         throw err1;
                     }
                     this.channel = channel;
-                })
+                });
             }
         );
     }

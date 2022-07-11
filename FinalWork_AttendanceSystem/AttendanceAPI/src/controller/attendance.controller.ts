@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
-import { inject } from "inversify";
-import { controller, httpDelete, httpGet, httpPost, queryParam, request, response } from "inversify-express-utils";
+import { Request, Response } from 'express';
+import { inject } from 'inversify';
+import { controller, httpDelete, httpGet, httpPost, queryParam, request, response } from 'inversify-express-utils';
 import AttendanceServiceInterface from '../service/serviceInterfaces/attendance.service.interface';
-import DITypes from "../shared/inversify.types";
-import { AttendanceId } from "../shared/types";
-import { ServerResponse } from "./server.response";
+import DITypes from '../shared/inversify.types';
+import { AttendanceId } from '../shared/types';
+import { ServerResponse } from './server.response';
 
 @controller('/api/attendance')
 export class AttendanceController {

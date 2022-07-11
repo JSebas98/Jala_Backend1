@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 import AttendanceInterface from '../entity/attendance.interface';
 
 type AttendanceId = string | Types.ObjectId;

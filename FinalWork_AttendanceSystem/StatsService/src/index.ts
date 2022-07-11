@@ -31,6 +31,7 @@ amqp.connect(connectionParams,(err0: any, connection: any) => {
                     console.log(`Received: ${messageString}`);
                     const message = JSON.parse(messageString);
                     const updatedUser = await userService.updateUserTotalAttendance(message);
+                    
                     if (updatedUser) {
                         channel.ack(msg);
                     }

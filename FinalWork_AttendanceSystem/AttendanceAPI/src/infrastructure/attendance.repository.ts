@@ -1,15 +1,15 @@
-import { injectable } from "inversify";
-import { Attendance } from "../entity/attendance";
-import AttendanceInterface from "../entity/attendance.interface";
-import { AttendanceId } from "../shared/types";
-import AttendanceRepositoryInterface from "./attendance.repository.interface";
+import { injectable } from 'inversify';
+import { Attendance } from '../entity/attendance';
+import AttendanceInterface from '../entity/attendance.interface';
+import { AttendanceId } from '../shared/types';
+import AttendanceRepositoryInterface from './attendance.repository.interface';
 import AttendanceModel from '../entity/attendance.entity';
-import { DeleteResult } from "mongodb";
+import { DeleteResult } from 'mongodb';
 
 @injectable()
 export class AttendanceRepository implements AttendanceRepositoryInterface {
     
-    async getSingleAttendance(id: AttendanceId) {
+    async getSingleAttendance(id: AttendanceId): Promise<AttendanceInterface | null> {
         return await AttendanceModel.findById(id);
     }
     

@@ -14,6 +14,6 @@ export class UserMapper {
             name: userDomain.name,
             nickname: userDomain.nickname,
             totalAttendance: userDomain.totalAttendance
-        }
+        };
     }
 }

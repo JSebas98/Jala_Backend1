@@ -28,6 +28,10 @@ export class UserRepository implements UserRepositoryInterface {
         return await this.userRepository.find();
     }
 
+    async getUserById(id: string): Promise<User | null> {
+        return await this.userRepository.findOneBy({ id: id });
+    }
+
     async getUsersByNameOrNickname(name: string, nickname: string) {
         return await this.userRepository.find({
             where: [

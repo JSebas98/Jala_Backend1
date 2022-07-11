@@ -9,7 +9,7 @@ export class UserService implements UserServiceInterface {
     constructor() {}
     
     async getSingleUser(userId: string): Promise<UserDomain | null> {
-        const response = await fetch(`${process.env.USER_API_URL}/details?userId=${userId}`);
+        const response = await fetch(`${process.env.USER_API_URL}/user?userId=${userId}`);
         const data = await response.json();
 
         return data.data;

@@ -17,6 +17,12 @@ export class UserController {
         ServerResponse.success(res, users, 'Users retreived successfully!');
     }
 
+    @httpGet('/user')
+    async getUserById(@queryParam('userId') userId: string, @response() res: Response) {
+        const user = await this.userService.getUserById(userId);
+        ServerResponse.success(res, user, `User ${userId} retrieved successfully.`);
+    }
+
     @httpGet('/filter')
     async getUserByNameOrNickname(@queryParam('name') name: string,
                                 @queryParam('nickname') nickname: string,

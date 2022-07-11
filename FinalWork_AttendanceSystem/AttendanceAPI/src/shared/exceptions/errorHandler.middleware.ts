@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { BaseError } from "./baseError";
+import { NextFunction, Request, Response } from 'express';
+import { BaseError } from './baseError';
 
 function handleError(
     err: BaseError,
@@ -7,7 +7,7 @@ function handleError(
     res: Response,
     next: NextFunction
 ) {
-    let code: number = err.statusCode || 500;
+    const code: number = err.statusCode || 500;
     res.status(code).json({
         message: err.message || 'Internal server error.',
         description: err.description || 'Oops! Something went bad.'

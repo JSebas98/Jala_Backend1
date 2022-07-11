@@ -1,4 +1,4 @@
-import { Attendance } from "../shared/types";
+import { Attendance } from '../shared/types';
 
 export class UserDomain {
     constructor(
@@ -22,7 +22,11 @@ export class UserDomain {
     }
 
     get totalAttendance() {
-        return this._totalAttendance
+        return this._totalAttendance;
+    }
+    
+    set totalAttendance(totalAttendances: number) {
+        this._totalAttendance = totalAttendances;
     }
 
     get attendances() {
@@ -31,9 +35,5 @@ export class UserDomain {
 
     set attendances(attendances: Attendance[] | undefined) {
         this._attendances = attendances;
-    }
-
-    set totalAttendance(totalAttendances: number) {
-        this._totalAttendance = totalAttendances;
     }
 }

@@ -1,5 +1,5 @@
-import { model, Schema } from "mongoose";
-import AttendanceInterface from "./attendance.interface";
+import { model, Schema } from 'mongoose';
+import AttendanceInterface from './attendance.interface';
 
 const attendanceSchema = new Schema<AttendanceInterface>({
     userId: { type: String, required: true },

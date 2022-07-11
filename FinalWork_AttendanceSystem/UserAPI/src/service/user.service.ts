@@ -27,6 +27,15 @@ export class UserService implements UserServiceInterface {
         return users;
     }
 
+    async getUserById(id: string): Promise<User | null> {
+        const user = await this.userRepository.getUserById(id);
+        if(!user) {
+            throw new NotFound(`User with id ${id} not found in database.`);
+        }
+
+        return user;
+    }
+
     async getUserDetailed(userId: string): Promise<UserDomain | null> {
         const user = await this.userRepository.getSingleUser(userId);
 
@@ -68,7 +77,7 @@ export class UserService implements UserServiceInterface {
             throw new NotFound(`User with ${user.id} not found. Can't update!`);
         }
 
-        if(user.totalAttendance) {
+        if(user.totalAttendance || user.totalAttendance === 0) {
             userToUpdate.totalAttendance = user.totalAttendance;
         }
 
@@ -105,10 +114,6 @@ export class UserService implements UserServiceInterface {
 
         if (!user.id) {
             errorDetails.push('Id is a required field.');
-        }
-
-        if (!user.totalAttendance) {
-            errorDetails.push('totalAttendance is a required field.');
         }
 
         return errorDetails;

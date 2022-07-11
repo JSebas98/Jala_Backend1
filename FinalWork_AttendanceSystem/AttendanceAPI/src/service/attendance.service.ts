@@ -19,19 +19,16 @@ export class AttendanceService implements AttendanceServiceInterface {
 
     async getAllAttendances(): Promise<AttendanceInterface[]> {
         const attendances = await this.attendanceRepository.getAllAttendances();
-
         return attendances;
     }
 
     async createNewAttendance(attendance: Attendance): Promise<AttendanceInterface> {
-
         const userExists = await this.validateUserExistence(attendance.userId);
         if(!userExists) {
             throw new NotFound(`User with id ${attendance.userId} doesn't exists.`);
         }
         
         const resultValidation: string[] = await this.validateFieldsAttendance(attendance);
-
         if (resultValidation.length > 0) {
             let errorDescription = '';
             resultValidation.forEach((message) => {
@@ -39,20 +36,21 @@ export class AttendanceService implements AttendanceServiceInterface {
             });
             throw new BadRequest(errorDescription);
         }
-
+        
         const createdAttendance = await this.attendanceRepository.createNewAttendance(attendance);
         const message: MessageToQueue = { event: 'AttendanceCreated', userId: attendance.userId };
         this.statsService.sendMessage(message);
-
+        
         return createdAttendance;
     }
 
     async getAttendancesByUser(userId: string): Promise<AttendanceInterface[]> {
-        const attendances = await this.attendanceRepository.getAttendancesByUser(userId);
-        if(attendances.length === 0) {
-            throw new NotFound(`No attendances for user ${userId} have been found.`);
+        const userExists = await this.validateUserExistence(userId);
+        if(!userExists) {
+            throw new NotFound(`User with id ${userId} doesn't exists.`);
         }
 
+        const attendances = await this.attendanceRepository.getAttendancesByUser(userId);
         return attendances;
     }
     
@@ -62,18 +60,16 @@ export class AttendanceService implements AttendanceServiceInterface {
         if(!result) {
             throw new NotFound(`Attendance with id ${id} not found. Cannot delete.`);
         }
-
-        const message: MessageToQueue = { event: 'AttendanceDeleted', userId: attendance.userId };
-        this.statsService.sendMessage(message);
-
+        if (attendance) {
+            const message: MessageToQueue = { event: 'AttendanceDeleted', userId: attendance.userId };
+            this.statsService.sendMessage(message);
+        }
+        
         return result;
     }
 
     async deleteAttendancesByUser(userId: string): Promise<boolean> {
-        const result = await this.attendanceRepository.deleteAttendancesByUser(userId)
-        if(!result) {
-            throw new NotFound(`No attendances for user ${userId} have been found.`);
-        }
+        const result = await this.attendanceRepository.deleteAttendancesByUser(userId);
 
         return result;
     }
